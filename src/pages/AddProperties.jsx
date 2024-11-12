@@ -28,6 +28,8 @@ const AddProperties = () => {
   const [selectedCity, setSelectedCity] = useState(null);
   const [propertyType, setPropertyType] = useState("Male");
   const [countryCode, setCountryCode] = useState("");
+  const [propertyId, setPropertyId] = useState(null);
+
   const options = [
     { value: "Apartment", label: "Apartment" },
     { value: "Condominium", label: "Condominium" },
@@ -45,7 +47,6 @@ const AddProperties = () => {
       dispatch(showLoading());
       const res = await axios.post(
         "http://localhost:8080/api/v1/addProperty",
-        // "https://backend-syndeo.onrender.com/api/v1/updateProfile",
         {
           ...values,
           userId: user._id,
@@ -57,12 +58,23 @@ const AddProperties = () => {
         }
       );
       dispatch(hideLoading());
+  
       if (res.status === 201) {
+        const newPropertyId = res.data._id;
+        setPropertyId(newPropertyId); 
+        console.log("Response data:", res.data);
+        console.log("New property ID:", newPropertyId); 
+        console.log("Property ID (state) before render:", propertyId); 
+  
         Swal.fire({
           title: "Property Added Successfully",
           icon: "success",
+          confirmButtonText: "Add Lease Agreement",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate(`/addLeaseAgreement/${newPropertyId}`); 
+          }
         });
-        navigate(`/dashboard/${user?._id}`);
       } else {
         message.error(res.data.message);
       }
@@ -72,6 +84,14 @@ const AddProperties = () => {
       message.error("Something went wrong");
     }
   };
+  
+ 
+  useEffect(() => {
+    if (propertyId) {
+      console.log("Updated property ID in state:", propertyId);
+    }
+  }, [propertyId]);
+  
   return (
     <div>
       <div>

@@ -77,6 +77,67 @@ const Dashboard = () => {
     //eslint-disable-next-line
   }, []);
 
+
+  const [allActiveProperties, setAllActiveProperties] = useState(null);
+
+  const getAllActiveProperties = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/v1/getAllActiveProperties",
+        { userId: params.id },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response.data) {
+        console.log("tenant data", response.data)
+        setAllActiveProperties(response.data.data);
+        console.log(allActiveProperties);
+      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
+    }
+  };
+
+  useEffect(() => {
+    getAllActiveProperties();
+
+    //eslint-disable-next-line
+  }, []);
+
+
+  const [selectedLeaseTerms, setSelectedLeaseTerms] = useState(null); 
+  const [showLeaseModal, setShowLeaseModal] = useState(false); 
+
+  const fetchLeaseTerms = async (leaseAgreementId) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/getLandlordLeaseTerms",
+        { landlordLeaseAgreementId: leaseAgreementId },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response.data) {
+        setSelectedLeaseTerms(response.data.data[0]); 
+        setShowLeaseModal(true); 
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Could not fetch lease terms. Please try again.");
+    }
+  };
+
+
   return (
     <div>
       <Layout>
@@ -129,6 +190,7 @@ const Dashboard = () => {
               </div>
             </form>
           </div>
+
           <div className="mt-6">
             {properties && properties.length > 0 ? (
               <div className="flex flex-col gap-4">
@@ -187,8 +249,80 @@ const Dashboard = () => {
               <p className="text-gray-500 text-center mt-4">...</p>
             )}
           </div>
+
+
+          <div className="mt-6">
+            {allActiveProperties && allActiveProperties.length > 0 ? (
+              <div className="flex flex-col gap-4">
+              {allActiveProperties.map((property) => (
+                <div
+                  key={property._id}
+                  className="flex justify-between w-[100%] py-4 lg:px-8 px-4 border border-gray-200 rounded-lg shadow-md bg-white"
+                >
+                  <div>
+                    <h2 className="text-lg text-gray-800 font-semibold">
+                      {property.propertyType?.label}
+                    </h2>
+                    <h2 className="text-2xl pt-3 space-x-3">
+                      <span>{property.doorNumber}</span>
+                      <span>{property.streetName}</span>
+                      <span>{property.landMark}</span>
+                    </h2>
+                    <h2 className="text-gray-700 pt-1 text-lg space-x-3">
+                      <span>{property.selectedCity?.name}</span>
+                      <span>{property.selectedState?.name}</span>
+                      <span>{property.selectedCountry?.name}</span>
+                    </h2>
+                  </div>
+                  
+                 
+                  <div className="mt-4 flex gap-3">
+                    <button
+                      className="px-4 py-1  bg-blue-500 text-white rounded-md hover:bg-blue-900"
+                      onClick={() => fetchLeaseTerms(property.landlordLeaseAgreement?._id)}
+                    >
+                      Read Lease Terms
+                    </button>
+                    <button
+                      className="px-4 py-1 bg-green-500 text-white rounded-md hover:bg-green-900"
+                    >
+                       Accept Lease Terms and Continue
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            ) : (
+              <p className="text-gray-500 text-center mt-4">...</p>
+            )}
+          </div>
+
         </div>
       </Layout>
+
+       {/* Lease Terms Modal */}
+       {showLeaseModal && selectedLeaseTerms && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
+          <div className="bg-white p-6 rounded-lg w-[90%] max-w-lg">
+            <h2 className="text-2xl font-bold mb-4">Lease Agreement Details</h2>
+            <p><strong>Rent Amount:</strong> {selectedLeaseTerms.RentAmount}</p>
+            <p><strong>Security Deposit:</strong> {selectedLeaseTerms.SecurityDeposit}</p>
+            <p><strong>Lease Duration:</strong> {selectedLeaseTerms.LeaseDuration}</p>
+            <p><strong>Start Date:</strong> {new Date(selectedLeaseTerms.StartDate).toLocaleDateString()}</p>
+            <p><strong>End Date:</strong> {new Date(selectedLeaseTerms.EndDate).toLocaleDateString()}</p>
+            <p><strong>Terms and Description:</strong> {selectedLeaseTerms.LeaseTermsAndDescription}</p>
+            <button
+              className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+              onClick={() => setShowLeaseModal(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      
     </div>
   );
 };

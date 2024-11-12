@@ -18,6 +18,7 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import AddProperties from "./pages/AddProperties";
 import LandlordTenants from "./pages/LandlordTenants";
+import AddLandlordLeaseAgreement from "./pages/AddLandlordLeaseAgreement";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -102,6 +103,16 @@ function App() {
               </ProtectedRoute>
             }
           ></Route>
+
+          <Route
+            path="/addLeaseAgreement/:propertyId"
+            element={
+              <ProtectedRoute>
+                <AddLandlordLeaseAgreement />
+              </ProtectedRoute>
+            }
+          ></Route>
+
         </Routes>
       )}
     </BrowserRouter>
