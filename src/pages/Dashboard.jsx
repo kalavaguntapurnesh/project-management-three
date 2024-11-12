@@ -20,8 +20,8 @@ const Dashboard = () => {
   const getCustomerInfo = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/getUserData",
-        // "https://backend-syndeo.onrender.com/api/v1/getUserData",
+        // "http://localhost:8080/api/v1/getUserData",
+        "https://project-management-backend-two.onrender.com/api/v1/getUserData",
         { userId: user?._id },
         {
           headers: {
@@ -45,7 +45,8 @@ const Dashboard = () => {
   const getProperties = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/getProperties",
+        // "http://localhost:8080/api/v1/getProperties",
+        "https://project-management-backend-two.onrender.com/api/v1/getProperties",
         { userId: params.id },
         {
           headers: {
@@ -83,7 +84,8 @@ const Dashboard = () => {
   const getAllActiveProperties = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/getAllActiveProperties",
+        // "http://localhost:8080/api/v1/getAllActiveProperties",
+        "https://project-management-backend-two.onrender.com/api/v1/getAllActiveProperties",
         { userId: params.id },
         {
           headers: {
@@ -119,7 +121,8 @@ const Dashboard = () => {
   const fetchLeaseTerms = async (leaseAgreementId) => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/getLandlordLeaseTerms",
+        // "http://localhost:8080/api/v1/getLandlordLeaseTerms",
+        "https://project-management-backend-two.onrender.com/api/v1/getLandlordLeaseTerms",
         { landlordLeaseAgreementId: leaseAgreementId },
         {
           headers: {

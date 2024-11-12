@@ -46,7 +46,8 @@ const AddProperties = () => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
-        "http://localhost:8080/api/v1/addProperty",
+        // "http://localhost:8080/api/v1/addProperty",
+        "https://project-management-backend-two.onrender.com/api/v1/addProperty",
         {
           ...values,
           userId: user._id,
