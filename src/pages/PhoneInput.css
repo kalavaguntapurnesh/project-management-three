@@ -1,0 +1,17 @@
+/* PhoneInputCustom.css */
+.custom-phone-input .phone-input-field {
+  @apply w-full p-3 text-base rounded-md focus:outline-none focus:ring-2;
+  padding-left: 3.5rem; /* Add space to the left to account for the flag */
+}
+
+.custom-phone-input .phone-input-button {
+  @apply p-3 rounded-l-md border-r border-gray-300;
+  position: absolute;
+  left: 0.5rem; /* Position the flag button on the left */
+  top: 50%;
+  transform: translateY(-50%); /* Center the flag vertically */
+}
+
+.phone-input-container {
+  @apply w-full flex items-center rounded-md relative; /* Make the container relative for positioning */
+}
