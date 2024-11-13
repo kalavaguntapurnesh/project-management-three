@@ -15,6 +15,7 @@ const Dashboard = () => {
   const params = useParams();
   const [customer, setCustomer] = useState(null);
   const [properties, setProperties] = useState(null);
+  const [tenantID, setTenantID] = useState(null);
   const navigate = useNavigate();
 
   const getCustomerInfo = async () => {
@@ -23,6 +24,7 @@ const Dashboard = () => {
         // "http://localhost:8080/api/v1/getUserData",
         "https://project-management-backend-two.onrender.com/api/v1/getUserData",
         { userId: user?._id },
+
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -41,6 +43,19 @@ const Dashboard = () => {
       });
     }
   };
+
+  // Checking the user role for displaying dashboard
+
+  const [roleName, setRoleName] = useState()
+  useEffect(() => {
+    if (customer && customer.role) {
+      setRoleName(customer.role);
+      // setTenantID(customer._id);
+    }
+  }, [customer]);
+
+  // console.log("tenant id:",user._id)
+// getting property details in landlord dashboard.
 
   const getProperties = async () => {
     try {
@@ -84,8 +99,8 @@ const Dashboard = () => {
   const getAllActiveProperties = async () => {
     try {
       const response = await axios.get(
-        // "http://localhost:8080/api/v1/getAllActiveProperties",
-        "https://project-management-backend-two.onrender.com/api/v1/getAllActiveProperties",
+        "http://localhost:8080/api/v1/getAllActiveProperties",
+        // "https://project-management-backend-two.onrender.com/api/v1/getAllActiveProperties",
         { userId: params.id },
         {
           headers: {
@@ -97,6 +112,7 @@ const Dashboard = () => {
         console.log("tenant data", response.data)
         setAllActiveProperties(response.data.data);
         console.log(allActiveProperties);
+        // console.log("agre id :", allActiveProperties.landlordLeaseAgreement);
       }
     } catch (error) {
       console.log(error);
@@ -113,33 +129,56 @@ const Dashboard = () => {
 
     //eslint-disable-next-line
   }, []);
-
+ 
 
   const [selectedLeaseTerms, setSelectedLeaseTerms] = useState(null); 
   const [showLeaseModal, setShowLeaseModal] = useState(false); 
+  const [landlordLeaseAgreementID, setLandlordLeaseAgreementID] = useState(null);
+  const [propertyID, setPropertyID] = useState(null);
 
-  const fetchLeaseTerms = async (leaseAgreementId) => {
+  const fetchLeaseTerms = async (propertyId) => {
+    setPropertyID(propertyId);
+    console.log("in fetch lease terms: ", propertyId);
     try {
       const response = await axios.post(
-        // "http://localhost:8080/api/v1/getLandlordLeaseTerms",
-        "https://project-management-backend-two.onrender.com/api/v1/getLandlordLeaseTerms",
-        { landlordLeaseAgreementId: leaseAgreementId },
+        "http://localhost:8080/api/v1/getLandlordLeaseTerms",
+        { propertyId }, // Send propertyId directly as part of request body
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      if (response.data) {
-        setSelectedLeaseTerms(response.data.data[0]); 
-        setShowLeaseModal(true); 
-      }
+  
+      if (response.data && response.data.data) {
+        // If `data` is an array, take the first item; if it’s an object, use it directly
+        const leaseTerms = Array.isArray(response.data.data) ? response.data.data[0] : response.data.data;
+        setSelectedLeaseTerms(leaseTerms); 
+        setShowLeaseModal(true);
+        console.log("lease terms:", leaseTerms);
+        setLandlordLeaseAgreementID(leaseTerms._id)
+        console.log("lease term id",leaseTerms._id)
+      }  
+      
     } catch (error) {
-      console.log(error);
-      alert("Could not fetch lease terms. Please try again.");
+      if (error.response && error.response.status === 404) {
+        // Show a custom message if the status is 404
+        Swal.fire({
+          icon: "info",
+          title: "Details not found",
+          text: "The landlord has not added lease terms.",
+        });
+      } else {
+        // Handle other types of errors
+        console.error("Error fetching lease terms:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error while fetching",
+          text: "Could not fetch lease terms. Please try again.",
+        });
+      }
     }
   };
-
 
   return (
     <div>
@@ -195,111 +234,111 @@ const Dashboard = () => {
           </div>
 
           <div className="mt-6">
-            {properties && properties.length > 0 ? (
-              <div className="flex flex-col gap-4">
-                {properties.map((property) => (
-                  <div
-                    key={property._id}
-                    className="w-[100%] py-4 lg:px-8 px-4 border border-gray-200 rounded-lg shadow-md bg-white"
-                  >
-                    <h2 className="text-lg text-gray-800 font-semibold">
-                      {property.propertyType?.label}
-                    </h2>
-                    <h2 className="text-2xl pt-3 space-x-3">
-                      <span>{property.doorNumber}</span>
-                      <span>{property.streetName}</span>
-                      <span>{property.landMark}</span>
-                    </h2>
-                    <h2 className="text-gray-700 pt-1 text-lg space-x-3">
-                      <span>{property.selectedCity?.name}</span>
-                      <span>{property.selectedState?.name}</span>
-                      <span>{property.selectedCountry?.name}</span>
-                    </h2>
+  {roleName === "landlord" ? (
+    <div className="flex flex-col gap-4">
+      {properties && properties.length > 0 ? (
+        properties.map((property) => (
+          <div
+            key={property._id}
+            className="w-[100%] py-4 lg:px-8 px-4 border border-gray-200 rounded-lg shadow-md bg-white"
+          >
+            <h2 className="text-lg text-gray-800 font-semibold">
+              {property.propertyType?.label}
+            </h2>
+            <h2 className="text-2xl pt-3 space-x-3">
+              <span>{property.doorNumber}</span>
+              <span>{property.streetName}</span>
+              <span>{property.landMark}</span>
+            </h2>
+            <h2 className="text-gray-700 pt-1 text-lg space-x-3">
+              <span>{property.selectedCity?.name}</span>
+              <span>{property.selectedState?.name}</span>
+              <span>{property.selectedCountry?.name}</span>
+            </h2>
 
-                    <h2 className="pt-2 pb-2 space-x-3 text-black font-semibold">
-                      <span className="bg-red-500 p-0.5 rounded-full"></span>
-                      <span>Vacant</span>
-                    </h2>
+            <h2 className="pt-2 pb-2 space-x-3 text-black font-semibold">
+              <span className="bg-red-500 p-0.5 rounded-full"></span>
+              <span>Vacant</span>
+            </h2>
 
-                    <div className="lg:w-[70%] w-[100%] mt-3">
-                      <div className="grid lg:grid-cols-5 grid-cols-2 gap-4 ">
-                        <div className="flex items-center justify-start">
-                          <HiSpeakerphone className="w-6 h-6 text-mainColor" />
-                          <h1 className="ml-2">Listing</h1>
-                        </div>
-                        <div className="flex items-center justify-start">
-                          <FaUserCheck className="w-6 h-6 text-mainColor" />
-                          <h1 className="ml-2">Applications</h1>
-                        </div>
-                        <div className="flex items-center justify-start">
-                          <IoDocumentText className="w-6 h-6 text-mainColor" />
-                          <h1 className="ml-2">Leases</h1>
-                        </div>
-                        <div className="flex items-center justify-start">
-                          <FaDollarSign className="w-6 h-6 text-mainColor" />
-                          <h1 className="ml-2">Payments</h1>
-                        </div>
-                        <div className="flex items-center justify-start">
-                          <GiSpanner className="w-6 h-6 text-mainColor" />
-                          <h1 className="ml-2">Maintenance</h1>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-500 text-center mt-4">...</p>
-            )}
-          </div>
-
-
-          <div className="mt-6">
-            {allActiveProperties && allActiveProperties.length > 0 ? (
-              <div className="flex flex-col gap-4">
-              {allActiveProperties.map((property) => (
-                <div
-                  key={property._id}
-                  className="flex justify-between w-[100%] py-4 lg:px-8 px-4 border border-gray-200 rounded-lg shadow-md bg-white"
-                >
-                  <div>
-                    <h2 className="text-lg text-gray-800 font-semibold">
-                      {property.propertyType?.label}
-                    </h2>
-                    <h2 className="text-2xl pt-3 space-x-3">
-                      <span>{property.doorNumber}</span>
-                      <span>{property.streetName}</span>
-                      <span>{property.landMark}</span>
-                    </h2>
-                    <h2 className="text-gray-700 pt-1 text-lg space-x-3">
-                      <span>{property.selectedCity?.name}</span>
-                      <span>{property.selectedState?.name}</span>
-                      <span>{property.selectedCountry?.name}</span>
-                    </h2>
-                  </div>
-                  
-                 
-                  <div className="mt-4 flex gap-3">
-                    <button
-                      className="px-4 py-1  bg-blue-500 text-white rounded-md hover:bg-blue-900"
-                      onClick={() => fetchLeaseTerms(property.landlordLeaseAgreement?._id)}
-                    >
-                      Read Lease Terms
-                    </button>
-                    <button
-                      className="px-4 py-1 bg-green-500 text-white rounded-md hover:bg-green-900"
-                    >
-                       Accept Lease Terms and Continue
-                    </button>
-                  </div>
+            <div className="lg:w-[70%] w-[100%] mt-3">
+              <div className="grid lg:grid-cols-5 grid-cols-2 gap-4">
+                <div className="flex items-center justify-start">
+                  <HiSpeakerphone className="w-6 h-6 text-mainColor" />
+                  <h1 className="ml-2">Listing</h1>
                 </div>
-              ))}
+                <div className="flex items-center justify-start">
+                  <FaUserCheck className="w-6 h-6 text-mainColor" />
+                  <h1 className="ml-2">Applications</h1>
+                </div>
+                <div className="flex items-center justify-start">
+                  <IoDocumentText className="w-6 h-6 text-mainColor" />
+                  <h1 className="ml-2">Leases</h1>
+                </div>
+                <div className="flex items-center justify-start">
+                  <FaDollarSign className="w-6 h-6 text-mainColor" />
+                  <h1 className="ml-2">Payments</h1>
+                </div>
+                <div className="flex items-center justify-start">
+                  <GiSpanner className="w-6 h-6 text-mainColor" />
+                  <h1 className="ml-2">Maintenance</h1>
+                </div>
+              </div>
             </div>
-            
-            ) : (
-              <p className="text-gray-500 text-center mt-4">...</p>
-            )}
           </div>
+        ))
+      ) : (
+        <p className="text-gray-500 text-center mt-4">No properties available...</p>
+      )}
+    </div>
+  ) : roleName === "tenant" ? (
+    <div className="flex flex-col gap-4">
+      {allActiveProperties && allActiveProperties.length > 0 ? (
+        allActiveProperties.map((property) => (
+          <div
+            key={property._id}
+            className="flex justify-between w-[100%] py-4 lg:px-8 px-4 border border-gray-200 rounded-lg shadow-md bg-white"
+          >
+            <div>
+              <h2 className="text-lg text-gray-800 font-semibold">
+                {property.propertyType?.label}
+              </h2>
+              <h2 className="text-2xl pt-3 space-x-3">
+                <span>{property.doorNumber}</span>
+                <span>{property.streetName}</span>
+                <span>{property.landMark}</span>
+              </h2>
+              <h2 className="text-gray-700 pt-1 text-lg space-x-3">
+                <span>{property.selectedCity?.name}</span>
+                <span>{property.selectedState?.name}</span>
+                <span>{property.selectedCountry?.name}</span>
+              </h2>
+            </div>
+
+            <div className="mt-4 flex gap-3">
+              <button
+                className="px-4 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-900"
+                onClick={() => fetchLeaseTerms(property._id)}
+              >
+                Read Lease Terms
+              </button>
+              <button className="px-4 py-1 bg-green-500 text-white rounded-md hover:bg-green-900"
+              //  onClick={navigate(`/addTenantLeaseAgreement/${propertyID}/${tenantID}/${landlordLeaseAgreementID}`)}
+              >
+                Accept Lease Terms and Continue
+              </button>
+            </div>
+          </div>
+        ))
+      ) : (
+        <p className="text-gray-500 text-center mt-4">No active properties available...</p>
+      )}
+    </div>
+  ) : (
+    <p className="text-gray-500 text-center mt-4">No properties available for your role...</p>
+  )}
+</div>
+
 
         </div>
       </Layout>
@@ -315,12 +354,23 @@ const Dashboard = () => {
             <p><strong>Start Date:</strong> {new Date(selectedLeaseTerms.StartDate).toLocaleDateString()}</p>
             <p><strong>End Date:</strong> {new Date(selectedLeaseTerms.EndDate).toLocaleDateString()}</p>
             <p><strong>Terms and Description:</strong> {selectedLeaseTerms.LeaseTermsAndDescription}</p>
-            <button
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-              onClick={() => setShowLeaseModal(false)}
-            >
-              Close
-            </button>
+           <div className="flex justify-between"> 
+                <button
+                  className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                  onClick={() => setShowLeaseModal(false)}
+                >
+                  Close
+                </button>
+
+                <button
+                  className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-900"
+                  // onClick={() => }
+                >
+                  Proceed
+                </button>
+
+          </div>
+
           </div>
         </div>
       )}
