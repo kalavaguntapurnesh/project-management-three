@@ -22,7 +22,7 @@ const Dashboard = () => {
     try {
       const response = await axios.post(
         // "http://localhost:8080/api/v1/getUserData",
-        "https://project-management-backend-two.onrender.com/api/v1/getUserData",
+        "https://rma1-backend.onrender.com/api/v1/getUserData",
         { userId: user?._id },
 
         {
@@ -61,7 +61,7 @@ const Dashboard = () => {
     try {
       const response = await axios.post(
         // "http://localhost:8080/api/v1/getProperties",
-        "https://project-management-backend-two.onrender.com/api/v1/getProperties",
+        "https://rma1-backend.onrender.com/api/v1/getProperties",
         { userId: params.id },
         {
           headers: {
@@ -99,8 +99,8 @@ const Dashboard = () => {
   const getAllActiveProperties = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/getAllActiveProperties",
-        // "https://project-management-backend-two.onrender.com/api/v1/getAllActiveProperties",
+        // "http://localhost:8080/api/v1/getAllActiveProperties",
+        "https://rma1-backend.onrender.com/api/v1/getAllActiveProperties",
         { userId: params.id },
         {
           headers: {
@@ -141,7 +141,8 @@ const Dashboard = () => {
     console.log("in fetch lease terms: ", propertyId);
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/getLandlordLeaseTerms",
+        // "http://localhost:8080/api/v1/getLandlordLeaseTerms",
+        "https://rma1-backend.onrender.com/api/v1/getLandlordLeaseTerms",
         { propertyId }, // Send propertyId directly as part of request body
         {
           headers: {
