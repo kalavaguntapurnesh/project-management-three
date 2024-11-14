@@ -117,7 +117,7 @@ function App() {
 {/* /addTenantLeaseAgreement/${property._Id}/${user._id}/${landlordLeaseAgreementID} */}
 
         <Route
-            path="/addTenantLeaseAgreement/:propertyId/:user._id/:landlordLeaseAgreementID"
+            path="/addTenantLeaseAgreement/:propertyID/:customerID/:landlordLeaseAgreementID"
             element={
               <ProtectedRoute>
                 <AddTenantLeaseAgreement />

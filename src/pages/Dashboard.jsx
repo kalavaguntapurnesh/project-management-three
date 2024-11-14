@@ -15,7 +15,7 @@ const Dashboard = () => {
   const params = useParams();
   const [customer, setCustomer] = useState(null);
   const [properties, setProperties] = useState(null);
-  const [tenantID, setTenantID] = useState(null);
+  // const [tenantID, setTenantID] = useState(null);
   const navigate = useNavigate();
 
   const getCustomerInfo = async () => {
@@ -99,8 +99,8 @@ const Dashboard = () => {
   const getAllActiveProperties = async () => {
     try {
       const response = await axios.get(
-        // "http://localhost:8080/api/v1/getAllActiveProperties",
-        "https://rma1-backend.onrender.com/api/v1/getAllActiveProperties",
+        "http://localhost:8080/api/v1/getAllActiveProperties",
+        // "https://rma1-backend.onrender.com/api/v1/getAllActiveProperties",
         { userId: params.id },
         {
           headers: {
@@ -131,6 +131,8 @@ const Dashboard = () => {
   }, []);
  
 
+  console.log("get all vacant with no repairs: ",allActiveProperties);
+
   const [selectedLeaseTerms, setSelectedLeaseTerms] = useState(null); 
   const [showLeaseModal, setShowLeaseModal] = useState(false); 
   const [landlordLeaseAgreementID, setLandlordLeaseAgreementID] = useState(null);
@@ -138,7 +140,8 @@ const Dashboard = () => {
 
   const fetchLeaseTerms = async (propertyId) => {
     setPropertyID(propertyId);
-    console.log("in fetch lease terms: ", propertyId);
+    console.log("property id: ", propertyId);
+    console.log("tenant id: ", customer._id);
     try {
       const response = await axios.post(
         // "http://localhost:8080/api/v1/getLandlordLeaseTerms",
@@ -184,7 +187,7 @@ const Dashboard = () => {
   return (
     <div>
       <Layout>
-        <div className="w-[100%]">
+        <div className="w-[100%] pb-[20px]">
           <div>
             <h1 className="pb-3 font-semibold leading-normal text-gray-800 tracking-normal text-2xl text-start">
               Hello, {customer?.fullName}
@@ -233,6 +236,7 @@ const Dashboard = () => {
               </div>
             </form>
           </div>
+          
 
           <div className="mt-6">
   {roleName === "landlord" ? (
@@ -241,7 +245,13 @@ const Dashboard = () => {
         properties.map((property) => (
           <div
             key={property._id}
-            className="w-[100%] py-4 lg:px-8 px-4 border border-gray-200 rounded-lg shadow-md bg-white"
+            className={`w-[100%] py-4 lg:px-8 px-4 border border-4 rounded-lg shadow-md bg-white ${
+              property.propertyState.value === 'Vacant' && property.propertyStatus.value === 'No'
+                ? 'border-green-500'
+                : property.propertyState.value === 'Contract Inprogress' ||  property.propertyState.value === 'Leased' 
+                ? 'border-orange-500'
+                : 'border-red-500'
+            }`}
           >
             <h2 className="text-lg text-gray-800 font-semibold">
               {property.propertyType?.label}
@@ -257,10 +267,23 @@ const Dashboard = () => {
               <span>{property.selectedCountry?.name}</span>
             </h2>
 
-            <h2 className="pt-2 pb-2 space-x-3 text-black font-semibold">
-              <span className="bg-red-500 p-0.5 rounded-full"></span>
-              <span>Vacant</span>
-            </h2>
+            <div className="flex gap-[100px]">
+                <h2 className="pt-2 pb-2 space-x-3 text-black font-semibold">
+                  <span className="bg-blue-900 p-0.5 rounded-full"></span>
+                  <span>{property.propertyState.value}</span>
+                </h2>
+
+                <h2 className="pt-2 pb-2 space-x-3 text-black font-semibold">
+                <span className="bg-blue-900 p-0.5 rounded-full"></span>
+                <span>{
+                   (property.propertyStatus.value === 'Yes' 
+                        ? 'Repair Work Scheduled ' 
+                        : 'No Repairs')
+                   }
+                </span> 
+                </h2>
+            </div>
+
 
             <div className="lg:w-[70%] w-[100%] mt-3">
               <div className="grid lg:grid-cols-5 grid-cols-2 gap-4">
@@ -324,7 +347,7 @@ const Dashboard = () => {
                 Read Lease Terms
               </button>
               <button className="px-4 py-1 bg-green-500 text-white rounded-md hover:bg-green-900"
-              //  onClick={navigate(`/addTenantLeaseAgreement/${propertyID}/${tenantID}/${landlordLeaseAgreementID}`)}
+               onClick={()=>navigate(`/addTenantLeaseAgreement/${propertyID}/${customer._id}/${landlordLeaseAgreementID}`)}
               >
                 Accept Lease Terms and Continue
               </button>
@@ -336,7 +359,7 @@ const Dashboard = () => {
       )}
     </div>
   ) : (
-    <p className="text-gray-500 text-center mt-4">No properties available for your role...</p>
+    <p className="text-gray-500 text-center mt-4">Loading ...</p>
   )}
 </div>
 
@@ -365,7 +388,7 @@ const Dashboard = () => {
 
                 <button
                   className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-900"
-                  // onClick={() => }
+                  onClick={()=>navigate(`/addTenantLeaseAgreement/${propertyID}/${customer._id}/${landlordLeaseAgreementID}`)}
                 >
                   Proceed
                 </button>

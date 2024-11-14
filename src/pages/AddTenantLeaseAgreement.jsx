@@ -3,21 +3,24 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Col, Form, Input, Row, message } from "antd";
+import { Col, Form, Input, Row, message,Select, Checkbox } from "antd";
 import Swal from "sweetalert2";
 
 const AddTenantLeaseAgreement = () => {
   const { user } = useSelector((state) => state.user);
-  const { propertyId } = useParams(); 
+  const { propertyID, customerID, landlordLeaseAgreementID } = useParams(); 
   const navigate = useNavigate(); 
   const [form] = Form.useForm();
 
-  console.log(propertyId);
+  console.log("in tenanat form propertyId",propertyID);
+  console.log("in tenanat form tenantID ",customerID);
+  console.log("in tenanat form landlordLeaseAgreementID ",landlordLeaseAgreementID);
   const handleLeaseSubmit = async (values) => {
     try {
       const res = await axios.post(
-        // `http://localhost:8080/api/v1/addLandlordLeaseProperty?propertyId=${propertyId}`,
-        `https://rma1-backend.onrender.com/api/v1/addLandlordLeaseProperty?propertyId=${propertyId}`,
+        
+        `http://localhost:8080/api/v1/addTenantLeaseAgreement?landlordLeaseAgreementId=${landlordLeaseAgreementID}&propertyId=${propertyID}&tenantId=${customerID}`,
+        // `https://rma1-backend.onrender.com/api/v1/addLandlordLeaseProperty?propertyId=${propertyId}`,
         values,
         {
           headers: {
@@ -37,9 +40,10 @@ const AddTenantLeaseAgreement = () => {
     //   }
 
     Swal.fire({
-            title: "Lease Agreement Created Successfully",
+            title: "Lease Agreement Accepted Successfully & Now you can go to payment page",
             icon: "success",
           });
+          // await updateTenantDetailsInLandlordDashboard(propertyID);
           navigate(`/dashboard/${user?._id}`);
         } else {
           message.error(res.data.message);
@@ -51,128 +55,51 @@ const AddTenantLeaseAgreement = () => {
     }
   };
 
+  //  async function updateTenantDetailsInLandlordDashboard(propertyID){
+
+  //  }
+
   return (
     <Layout>
-      <div className="container mx-auto p-6">
-        <h2 className="text-2xl font-semibold text-center mb-6">Add Lease Agreement</h2>
-        <Form layout="vertical" form={form} onFinish={handleLeaseSubmit}>
-          <Row gutter={20}>
-            <Col xs={24} md={12}>
-              <Form.Item
-                label="Rent Amount"
-                name="RentAmount"
-                rules={[{ required: true, message: "Please enter rent amount" }]}
-              >
-                <Input placeholder="Enter Rent Amount" />
-              </Form.Item>
-            </Col>
+      <div className="container mx-auto p-6 max-w-md">
+  <h2 className="text-2xl font-semibold text-center mb-6">Accept Lease Agreement Form</h2>
+  <Form layout="vertical" form={form} onFinish={handleLeaseSubmit}>
+    
+    <Form.Item
+      label="Acceptance Status"
+      name="AcceptanceStatus"
+      rules={[{ required: true, message: "Please select Acceptance Status" }]}
+    >
+      <Select placeholder="Select Status">
+        <Select.Option value="Accept">Accept</Select.Option>
+      </Select>
+    </Form.Item>
+    
+    <Form.Item
+      name="leaseTerms"
+      valuePropName="checked"
+      rules={[{ required: true, message: "Please agree to the lease terms" }]}
+    >
+      <Checkbox>Agree to lease terms (accepting all lease terms given by the landlord)</Checkbox>
+    </Form.Item>
+    
+    <Form.Item
+      label="Signature"
+      name="Signature"
+      rules={[{ required: true, message: "Please enter your signature" }]}
+    >
+      <Input placeholder="Enter Signature" />
+    </Form.Item>
 
-            <Col xs={24} md={12}>
-              <Form.Item
-                label="Security Deposit"
-                name="SecurityDeposit"
-                rules={[{ required: true, message: "Please enter security deposit" }]}
-              >
-                <Input placeholder="Enter Security Deposit" />
-              </Form.Item>
-            </Col>
+    <div className="flex justify-center mt-4">
+      <button className="bg-mainColor text-white py-2 px-8 rounded-md" type="submit">
+        Submit Lease Agreement
+      </button>
+    </div>
+    
+  </Form>
+</div>
 
-            <Col xs={24} md={12}>
-              <Form.Item
-                label="Lease Duration"
-                name="LeaseDuration"
-                rules={[{ required: true, message: "Please enter Lease Duration" }]}
-              >
-                <Input placeholder="Enter Lease Duration" />
-              </Form.Item>
-            </Col>
-
-            <Col xs={24} md={12}>
-            <Form.Item
-                label="Start Date"
-                name="StartDate"
-                rules={[{ required: true, message: "Please enter Start Date" }]}
-            >
-                <Input type="date" placeholder="Select Start Date" />
-            </Form.Item>
-            </Col>
-
-            <Col xs={24} md={12}>
-            <Form.Item
-                label="End Date"
-                name="EndDate"
-                rules={[{ required: true, message: "Please enter End Date" }]}
-            >
-                <Input type="date" placeholder="Select End Date" />
-            </Form.Item>
-            </Col>
-
-            <Col xs={24} md={12}>
-            <Form.Item
-                label="Status"
-                name="Status"
-                rules={[{ required: true, message: "Please enter Status" }]}
-            >
-                <Input placeholder="Enter Status" />
-            </Form.Item>
-            </Col>
-
-            <Col xs={24} md={12}>
-            <Form.Item
-                label="Lease Terms and Description"
-                name="LeaseTermsAndDescription"
-                rules={[{ required: true, message: "Please enter Lease Terms and Description" }]}
-            >
-                <Input.TextArea
-                placeholder="Enter Lease Terms and Description"
-                maxLength={40}
-                rows={2}
-                />
-            </Form.Item>
-            </Col>
-
-            <Col xs={24} md={12}>
-            <Form.Item
-                label="Late Fee Policy"
-                name="Late_Fee_Policy"
-                rules={[{ required: true, message: "Please enter Late Fee Policy" }]}
-            >
-                <Input placeholder="Enter Late Fee Policy" />
-            </Form.Item>
-            </Col>
-
-            <Col xs={24} md={12}>
-            <Form.Item
-                label="Rent Increase Policy"
-                name="Rent_Increase_policy"
-                rules={[{ required: true, message: "Please enter Rent Increase Policy" }]}
-            >
-                <Input placeholder="Enter Rent Increase Policy" />
-            </Form.Item>
-            </Col>
-
-            <Col xs={24} md={12}>
-            <Form.Item
-                label="Renewal Option"
-                name="Renewel_Option"
-                rules={[{ required: true, message: "Please enter Renewal Option" }]}
-            >
-                <Input placeholder="Enter Renewal Option" />
-            </Form.Item>
-            </Col>
-
-        </Row>
-
-          <div className="flex justify-center mt-4">
-            <button
-              className="bg-mainColor text-white py-2 px-8 rounded-md"
-              type="submit"
-            >
-              Submit Lease Agreement
-            </button>
-          </div>
-        </Form>
-      </div>
     </Layout>
   );
 };

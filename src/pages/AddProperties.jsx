@@ -37,6 +37,17 @@ const AddProperties = () => {
     { value: "Other", label: "Other" },
   ];
 
+  const propertyState = [
+    { value: "Vacant", label: "Vacant" },
+    { value: "Contract Inprogress", label: "Contract Inprogress" },
+    { value: "Leased", label: "Leased" },
+  ]
+
+  const propertyStatus = [
+    { value: "Yes", label: "Yes" },
+    { value: "No", label: "No" },
+  ]
+
   const handleCountryChange = (country) => {
     setSelectedCountry(country);
     setCountryCode(country.isoCode);
@@ -46,8 +57,8 @@ const AddProperties = () => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
-        // "http://localhost:8080/api/v1/addProperty",
-        "https://rma1-backend.onrender.com/api/v1/addProperty",
+        "http://localhost:8080/api/v1/addProperty",
+        // "https://rma1-backend.onrender.com/api/v1/addProperty",
         {
           ...values,
           userId: user._id,
@@ -179,6 +190,40 @@ const AddProperties = () => {
                         </Form.Item>
                       </Col>
 
+                     
+                      <Col xs={24} md={24} lg={8}>
+                        <Form.Item
+                          label="Property State"
+                          name="propertyState"
+                          required
+                          rules={[{ required: true }]}
+                          className="font-medium"
+                        >
+                          <Select
+                            onChange={setPropertyType}
+                            label="Age"
+                            options={propertyState}
+                          ></Select>
+                        </Form.Item>
+                      </Col>
+
+                      <Col xs={24} md={24} lg={8}>
+                        <Form.Item
+                          label="Has a Repair"
+                          name="propertyStatus"
+                          required
+                          rules={[{ required: true }]}
+                          className="font-medium"
+                        >
+                          <Select
+                            onChange={setPropertyType}
+                            label="Age"
+                            options={propertyStatus}
+                          ></Select>
+                        </Form.Item>
+                      </Col>
+
+
                       <Col xs={24} md={24} lg={8}>
                         <Form.Item
                           label="Country"
@@ -298,6 +343,7 @@ const AddProperties = () => {
                           />
                         </Form.Item>
                       </Col>
+
                     </Row>
 
                     <div className=" flex justify-center items-center">
