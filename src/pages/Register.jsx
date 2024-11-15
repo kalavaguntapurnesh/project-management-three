@@ -45,7 +45,8 @@ const Register = () => {
       axios
         .post(
           // "https://backend-six-kappa-64.vercel.app/auth/register",
-          "http://localhost:8080/api/v1/registerUser",
+          // "http://localhost:8080/api/v1/registerUser",
+          "https://rma1-backend.onrender.com/api/v1/registerUser",
           {
             email,
             password,

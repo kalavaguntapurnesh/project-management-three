@@ -147,7 +147,7 @@ const Dashboard = () => {
       const response = await axios.post(
         // "http://localhost:8080/api/v1/getLandlordLeaseTerms",
         "https://rma1-backend.onrender.com/api/v1/getLandlordLeaseTerms",
-        { propertyId }, // Send propertyId directly as part of request body
+        { propertyId }, 
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
