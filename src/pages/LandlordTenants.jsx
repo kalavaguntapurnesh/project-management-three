@@ -1,20 +1,22 @@
-import { useAppContext } from "../AppContext"; // Import context hook
 
-const LandlordTenants = () => {
-  const { tenantDetails, landlordDetails } = useAppContext();
+import { useDetails } from "../AppContext";
 
+const LandlordTenants = ({tenantdetails}) => {
+  const { details } = useDetails(); 
+  console.log("inside landlord tenant details:", tenantdetails);
+  // console.log(details);
+  // console.log(details.tenantDetails);
+  // console.log(details.landlordDetails);
   return (
     <div>
-      <h3>Tenant Details</h3>
-      {tenantDetails ? (
-        <pre>{JSON.stringify(tenantDetails, null, 2)}</pre>
+      <h3>Tenant and Landlord Details</h3>
+      {details.tenantDetails ? (
+        <p>Tenant Name: {details.tenantDetails.name}</p>
       ) : (
         <p>No tenant details available.</p>
       )}
-
-      <h3>Landlord Details</h3>
-      {landlordDetails ? (
-        <pre>{JSON.stringify(landlordDetails, null, 2)}</pre>
+      {details.landlordDetails ? (
+        <p>Landlord Name: {details.landlordDetails.name}</p>
       ) : (
         <p>No landlord details available.</p>
       )}
@@ -23,3 +25,5 @@ const LandlordTenants = () => {
 };
 
 export default LandlordTenants;
+
+
