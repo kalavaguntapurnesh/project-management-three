@@ -5,7 +5,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { Provider } from "react-redux";
 import store from "./redux/store.js";
-import { DetailsProvider } from "./AppContext.jsx"; // Import AppProvider correctly
+import { DetailsProvider } from "./AppContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>

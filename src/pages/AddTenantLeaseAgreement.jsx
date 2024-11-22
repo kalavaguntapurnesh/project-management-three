@@ -7,6 +7,8 @@ import Layout from "../components/Layout";
 import axios from "axios";
 import { useDetails } from "../AppContext";
 import LandlordTenants from "./LandlordTenants";
+import { useDispatch } from "react-redux";
+import { setTenantDetails, setLandlordDetails } from "../redux/features/tenantLandlordSlice";
 
 const AddTenantLeaseAgreement = () => {
   const { setDetails } = useDetails(); 
@@ -14,7 +16,7 @@ const AddTenantLeaseAgreement = () => {
   const { propertyID, customerID, landlordLeaseAgreementID } = useParams();
   const navigate = useNavigate();
   const [form] = Form.useForm();
-
+  const dispatch = useDispatch();
   const [tenantDetails, setTenantDetails] = useState([]);
 
   const handleLeaseSubmit = async (values) => {
@@ -59,15 +61,35 @@ const AddTenantLeaseAgreement = () => {
 
         console.log("tenant details: ", tenantRes);
         console.log("landlord details: ", landlordRes);
-        // Update context state
-        // setDetails({
+        // Update context state method
+
+        // setDetails((prevDetails) => ({
+        //   ...prevDetails,  // Spread previous state to keep other properties intact
         //   tenantDetails: tenantRes.data,
         //   landlordDetails: landlordRes.data,
-        // });
+        // }));
 
-        setTenantDetails(tenantRes);
+        
+      // local storage method
+
+        // localStorage.setItem('tenantDetails', JSON.stringify(tenantRes.data));
+        // localStorage.setItem('landlordDetails', JSON.stringify(landlordRes.data));
+      
+        // redux
+
+            // console.log("Dispatching tenant details:", tenantRes.data);
+            // dispatch(setTenantDetails(tenantRes.data));
+            // console.log("Dispatching landlord details:", landlordRes.data);
+            // dispatch(setLandlordDetails(landlordRes.data));
+
+         console.log(tenantRes.data);
+         console.log(landlordRes.data);
+      
+
+        // setTenantDetails(tenantRes);
 
         console.log("in side state varible" , tenantDetails);
+
         navigate(`/dashboard/${user?._id}`);
       } else {
         message.error(res.data.message);
@@ -120,9 +142,7 @@ const AddTenantLeaseAgreement = () => {
           </div>
         </Form>
 
-        {
-            <LandlordTenants  tenantdetails = {tenantDetails} /> 
-        }
+    
       </div>
     </Layout>
   );

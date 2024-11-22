@@ -21,8 +21,8 @@ import LandlordTenants from "./pages/LandlordTenants";
 // import TenantLandlords from "./pages/TenantLandlords";
 import AddLandlordLeaseAgreement from "./pages/AddLandlordLeaseAgreement";
 import AddTenantLeaseAgreement from "./pages/AddTenantLeaseAgreement";
-
-
+import Lease from "./pages/Lease";
+import LeaseCreateForm from "./pages/LeaseCreateForm";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -133,6 +133,24 @@ function App() {
             element={
               <ProtectedRoute>
                 <AddTenantLeaseAgreement />
+              </ProtectedRoute>
+            }
+          ></Route>
+
+        <Route
+            path="/lease-form/:propertyID"
+            element={
+              <ProtectedRoute>
+                <Lease />
+              </ProtectedRoute>
+            }
+          ></Route>
+
+        <Route
+            path="/lease-form/:propertyID/create-form"
+            element={
+              <ProtectedRoute>
+                <LeaseCreateForm />
               </ProtectedRoute>
             }
           ></Route>

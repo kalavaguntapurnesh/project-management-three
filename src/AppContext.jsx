@@ -1,22 +1,15 @@
-import React, { createContext, useContext, useState } from "react";
-
+import React, { createContext, useState, useContext } from 'react';
 
 const DetailsContext = createContext();
 
-
 export const useDetails = () => {
-  const context = useContext(DetailsContext);
-  if (!context) {
-    throw new Error("useDetails must be used within a DetailsProvider");
-  }
-  return context;
+  return useContext(DetailsContext);
 };
-
 
 export const DetailsProvider = ({ children }) => {
   const [details, setDetails] = useState({
-    tenant: null,
-    landlord: null,
+    tenantDetails: null,
+    landlordDetails: null,
   });
 
   return (

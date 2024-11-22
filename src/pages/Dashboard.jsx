@@ -58,6 +58,7 @@ const Dashboard = () => {
   // console.log("tenant id:",user._id)
 // getting property details in landlord dashboard.
 
+  // const [leasePropertyId, setLeasePropertyId] = useState(null);
   const getProperties = async () => {
     try {
       const response = await axios.post(
@@ -72,6 +73,7 @@ const Dashboard = () => {
       );
       if (response.data) {
         setProperties(response.data.data);
+        
       }
     } catch (error) {
       console.log(error);
@@ -94,6 +96,7 @@ const Dashboard = () => {
     //eslint-disable-next-line
   }, []);
 
+console.log("properties log :: ", properties);
 
   const [allActiveProperties, setAllActiveProperties] = useState(null);
 
@@ -298,12 +301,12 @@ const Dashboard = () => {
                 </div>
                 <div className="flex items-center justify-start">
                   <IoDocumentText className="w-6 h-6 text-mainColor" />
-                  <h1 className="ml-2">Leases</h1>
+                  <h1 className="ml-2 cursor-pointer" onClick={()=>navigate(`/lease-form/${property._id}`)}>Leases</h1>
                 </div>
                 <div className="flex items-center justify-start">
                   <FaDollarSign className="w-6 h-6 text-mainColor" />
                   <h1 className="ml-2">Payments</h1>
-                </div>
+                </div> 
                 <div className="flex items-center justify-start">
                   <GiSpanner className="w-6 h-6 text-mainColor" />
                   <h1 className="ml-2">Maintenance</h1>
