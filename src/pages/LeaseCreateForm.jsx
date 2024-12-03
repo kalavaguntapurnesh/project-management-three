@@ -8,11 +8,18 @@ import { FaRegEdit } from "react-icons/fa";
 import Clauses from "./Clauses";
 import Rules from "./Rules";
 import Disclosures from "./Disclosures";
+import Attachments from "./Attachments";
+
 const LeaseCreateForm = () => {
   const { propertyID } = useParams();
   const navigate = useNavigate();
 
   const [property, setProperty] = useState(null);
+  const [landlordDetails, setLandlordDetails] = useState(null);
+
+  const handleNavigation = () => {
+    navigate(`/profile/:${propertyID}`);
+  };
 
   const getPropertyDetails = async () => {
     try {
@@ -33,9 +40,45 @@ const LeaseCreateForm = () => {
     }
   };
 
+
   useEffect(() => {
     getPropertyDetails();
   }, [propertyID]);
+
+  const getLandlordDetails = async()=>{
+    try{
+      const response = await axios.post("http://localhost:8080/api/v1/getLandlordDetailsInTenantDashboard",
+        {
+          propertyId: propertyID,
+        }
+      );
+
+      if (response.data) {
+        setLandlordDetails(response.data);
+      } else {
+        console.error("Failed to fetch landlord details");
+      }
+    } catch (error) {
+      console.error("Error fetching landlord details:", error);
+    }
+  }
+
+  useEffect(()=>{
+    getLandlordDetails();
+  },[propertyID]);
+
+  console.log("landlord details : ", landlordDetails);
+  const fullName = landlordDetails?.landlordDetails?.userId?.fullName;
+  const email = landlordDetails?.landlordDetails?.userId?.email;
+  const phonenumber = landlordDetails?.landlordDetails?.userId?.phoneNumber;
+  console.log("landlord details : ", fullName);
+  console.log("landlord details : ", email  );
+  console.log("landlord details : ", phonenumber  );
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   const [activeItem, setActiveItem] = useState("lease term"); // Tracks the current section
   const [formData, setFormData] = useState({
@@ -991,26 +1034,178 @@ const handleOptionChange = (option) => {
               <div className="shadow-box p-6 border rounded-lg bg-white">
                 <div className="mb-4">
                   <h1 className="font-bold text-3xl text-mainColor">Attachments</h1>
+                  <Attachments/>
+
+                  <div className="flex justify-between mt-[50px]">
+                    <button
+                      onClick={() => setActiveItem(menuItems[menuItems.indexOf(activeItem) - 1])}
+                      className="mt-6 bg-mainColor text-white p-2 w-[100px] rounded-lg"
+                    >       
+                        Back
+                    </button>
+                    <button
+                      onClick={handleNext}
+                      className="mt-6 bg-mainColor text-white p-2 w-[100px] rounded-lg"
+                    >
+                       Next
+                    </button>    
+                </div>
+
+                {/* Terms of Use */}
+                <div className="text-center p-4 text-sm text-gray-600">
+                    <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer ">Terms of use.</span> Lease templates and their 
+                    contents are not guarented, may not be suitable for your circumstances, and should be independently verified with your professional advisors
+                    prior to use.
+                    </p>
+                </div>
+
+                
                 </div>
                 {/* Attachments Form */}
               </div>
             );
+
           case "lessor info":
             return (
               <div className="shadow-box p-6 border rounded-lg bg-white">
+                <div className="">
                 <div className="mb-4">
-                  <h1 className="font-bold text-3xl text-mainColor">Lessor Info</h1>
+                  <h1 className="font-bold text-3xl text-gray-700">Your Contact Information</h1>
+                  <div className="m-3 flex flex-col gap-4">
+                      <div className="shadow-lg p-4 text-xl rounded-lg">If you would like to change the name, phone, or email address associated with this account, please do so from within your <span onClick={handleNavigation} className="underline text-mainColor cursor-pointer font-bold">Account Settings.</span></div>
+                      <div className="flex gap-4 w-full justify-between">
+                        <div className="w-1/2">
+                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                            <input type="text" id="name" value={fullName} readOnly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Name" required />
+                        </div>
+                        <div className="w-1/2">
+                            <div>
+                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                            <input type="email" id="email" value={email}  readOnly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Email" required />
+
+                            </div>           
+                        </div>
+                      </div> 
+                      <div className="w-full">
+                        <label for="phonenumber" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone Number</label>
+                        <input type="number" id="email"  value={phonenumber} readOnly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="phone number" required />
+                      </div>
+                 </div> 
+
+                  <div className="py-5">
+                    <h1 className="font-bold text-3xl text-gray-700">Company Info</h1>
+                    <div className="m-3 flex flex-col gap-4">
+                        <div className="shadow-lg p-4 text-xl rounded-lg">If you prefer not to have your personal name and phone number on the lease, you can enter your company information, which will be used instead. Your personal phone is still required to help us prevent fraud.</div>
+          
+                        <div className="w-full">
+                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company Name</label>
+                            <input type="text" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Name" required />
+                        </div>                      
+                        <div className="w-full">
+                          <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company Phone</label>
+                          <input type="number" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Email" required />
+                        </div>
+                    </div> 
+                  </div>
+
+                 <div className="py-5 flex flex-col gap-4">
+                  <h1 className="font-bold text-3xl text-gray-700">Emergency Line (optional)</h1>
+                  <div className="w-full space-y-2">
+                      <label for="name" class="block mb-2 text-lg  text-gray-500 dark:text-white">Phone where tenants can reach someone in a maintenance emergency</label>
+                      <input type="number" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="000-000-0000" required />
+                    </div>
+                  </div>
+
+                  <div className="py-5 flex flex-col gap-4">
+                    <h1 className="font-bold text-3xl text-gray-700">Lessor Address (Home or Business)</h1>
+                    <h1 className=" text-xl text-gray-500">A lessor address is required on all leases.</h1>
+                    <div className="w-full space-y-2">
+                      <label for="name" class="block mb-2 text-lg  text-gray-500 dark:text-white">Start typing the street address</label>
+                      <input type="text" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="start typing ..." required />
+                    </div> 
+                  </div>
+
+
+                  <div className="flex justify-between mt-[50px]">
+                    <button
+                      onClick={() => setActiveItem(menuItems[menuItems.indexOf(activeItem) - 1])}
+                      className="mt-6 bg-mainColor text-white p-2 w-[100px] rounded-lg"
+                    >       
+                        Back
+                    </button>
+                    <button
+                      onClick={handleNext}
+                      className="mt-6 bg-mainColor text-white p-2 w-[150px] rounded-lg"
+                    >
+                      Save & Next
+                    </button>    
+                  </div>
+
+                   {/* Terms of Use */}
+                  <div className="text-center p-4 text-sm text-gray-600">
+                      <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer ">Terms of use.</span> Lease templates and their 
+                      contents are not guarented, may not be suitable for your circumstances, and should be independently verified with your professional advisors
+                      prior to use.
+                      </p>
+                  </div>
+
+                </div>
                 </div>
                 {/* Lessor Info Form */}
               </div>
             );
+
           case "terms agreement":
             return (
               <div className="shadow-box p-6 border rounded-lg bg-white">
-                <div className="mb-4">
-                  <h1 className="font-bold text-3xl text-mainColor">Terms Agreement</h1>
+                <div className="mb-4 flex flex-col shadow-lg p-4 gap-6">
+                 
+                  <div className="text-2xl font-semibold text-mainColor">Please agree to the following before creating your lease.</div>
+                  <div className="text-xl text-gray-600">By clicking "I agree", you acknowledge that you have read, understand, have had the opportunity to consult with counsel of your choosing, 
+                    and agree to the <span className="cursor-pointer text-blue-900 text-2xl font-bold" onClick={handleOpenModal}>provisions</span> stated herein.</div>
                 </div>
-                {/* Terms Agreement Form */}
+
+                 {/* Modal */}
+                      {isModalOpen && (
+                        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 ">
+                          <div className="bg-white shadow-lg rounded-lg relative w-1/2 max-h-[80vh] overflow-y-scroll py-20">
+                            {/* Close Button */}
+                            <button
+                              className="absolute top-4 right-4 text-gray-600 hover:text-black p-8  text-3xl"
+                              onClick={handleCloseModal}
+                            >
+                              ✖
+                            </button>
+                            
+                            {/* Modal Content */}
+                            <div className="p-6">
+                              <p className="text-xl">
+                                The law firm of Gordon & Rees Scully Mansukhani, LLP (the "Firm") has prepared example residential leases ("Forms") for
+                                publication on the Rentals site. These Forms are merely to provide information and examples for self-help purposes. 
+                                The Firm strives to keep the Forms accurate, current and up-to-date. However, because the law changes rapidly, 
+                                the Firm cannot guarantee that all of the information on the Rentals site is completely current. The law is different from jurisdiction to jurisdiction, and may be subject to interpretation by different courts. The law is a personal matter, and no Forms like the kind published on the Rentals site can fit every circumstance. Furthermore, the Forms are not legal advice and are not guaranteed to be correct, complete or up-to-date. Therefore, if you need legal advice for your specific problem, 
+                                you must consult a licensed attorney in your area. Except as part of a Firm Legal Engagement (defined below), we do not review any information you input on the Forms for legal accuracy or sufficiency, draw legal conclusions, provide opinions about your selection of forms, or apply the law to the facts of your situation. If you need legal advice for a specific problem, you should consult with a licensed attorney. Use of the Forms or any other legal information published on the Rentals site is not a substitute for legal advice from a qualified attorney licensed to practice in an appropriate jurisdiction. Communications between you, the Firm, and/or Rentals may not be protected as privilege communications under the attorney-client privilege or work product doctrine. Also, if you submit questions to the Firm or Rentals, the communications between you and the individual who answers your question may not be protected as privileged communications under the attorney-client privilege or work product doctrine. Your use of the Forms does not create an attorney-client relationship between you and Gordon & Rees Scully Mansukhani, LLP, or between you and any Gordon & Rees Scully Mansukhani, LLP employee or representative, unless you specifically enter into a Legal Services Agreement executed by an authorized partner of the Firm. Unless you are otherwise represented by an attorney, including any external attorney, you represent yourself in any legal matter you undertake through use of our Forms.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+
+                    <div className="flex justify-between mt-[30px]">
+                    <button
+                      onClick={() => setActiveItem(menuItems[menuItems.indexOf(activeItem) - 1])}
+                      className="mt-6 bg-mainColor text-white p-2 w-[100px] rounded-lg"
+                    >       
+                        Back
+                    </button>
+                    <button
+                      onClick={handleNext}
+                      className="mt-6 bg-mainColor text-white p-2 w-[150px] rounded-lg"
+                    >
+                      I Agree
+                    </button>    
+                  </div>
               </div>
             );
           default:
