@@ -4,8 +4,8 @@ import { MdAddHomeWork } from "react-icons/md";
 
 const Clauses = () => {
   return (
-    <div>
-        <div className="shadow-md p-2 mb-2 mt-2 flex flex-col gap-4 bg-gray-100 rounded-lg">
+            <div>
+                <div className="shadow-md p-2 mb-2 mt-2 flex flex-col gap-4 bg-gray-100 rounded-lg">
                     <div className="mb-4 flex justify-between">
                         <label className="block font-bold text-2xl text-gray-700">1. Rent</label>
                         <span className="text-xl cursor-pointer"><FaRegEdit /></span>
@@ -373,35 +373,38 @@ const Clauses = () => {
                     <p className="text-gray-600">This lease shall be governed by and construed in accordance with the laws of the State of New York, without regard for New York choice-of-law principles.</p>
                 </div>
 
-                <div className='shadow-md p-2 mb-2 mt-2 flex flex-col gap-2 bg-gray-100 rounded-lg'>
-                    <div className="mb-4 flex gap-4 m-4 items-center">
-                        <span className="text-2xl cursor-pointer"><MdAddHomeWork /></span>
-                        <label className="block font-bold text-2xl text-gray-700"> Add your own clause</label>
-                    </div>
-                    <div className='flex flex-col gap-2 m-2'>
-                        <label className='text-gray-700'>Clause Name</label>
-                        <input 
-                            className='p-2 border-b-2 border-gray-400 outline-none focus:border-blue-500' 
-                            type='text' 
-                            placeholder='Enter Clause Name' 
-                        />
-                    </div>
-                    <div className='flex flex-col gap-2 m-2'>
-                        <label className='text-gray-700'>Clause Text</label>
-                        <textarea 
-                            className='p-2 border-b-2 border-gray-400 outline-none focus:border-blue-500' 
-                            placeholder='Enter Clause Text'
-                            rows="4"
-                        ></textarea>
-                    </div>
-
-                    <div className='flex justify-end'>
-                        <button className="mt-6  bg-gray-600 hover:text-lg text-white p-4 w-1/5 rounded-lg">
-                            Save Clause
-                        </button>
-                    </div>
-
-                </div>
+                <div className="shadow-md p-2 mb-2 mt-2 flex flex-col gap-2 bg-gray-100 rounded-lg">
+    <div className="mb-4 flex gap-4 m-4 items-center">
+        <span className="text-2xl cursor-pointer"><MdAddHomeWork /></span>
+        <label className="block font-bold text-2xl text-gray-700">Add Clauses</label>
+    </div>
+    {formData.clauses.map((clause, index) => (
+        <div key={index} className="flex flex-col gap-2 m-2">
+            <label className="text-gray-700">Clause Name</label>
+            <input
+                className="p-2 border-b-2 border-gray-400 outline-none focus:border-blue-500"
+                type="text"
+                placeholder="Enter Clause Name"
+                value={clause.name}
+                onChange={(e) => handleClauseChange(index, "name", e.target.value)}
+            />
+            <label className="text-gray-700">Clause Text</label>
+            <textarea
+                className="p-2 border-b-2 border-gray-400 outline-none focus:border-blue-500"
+                placeholder="Enter Clause Text"
+                rows="4"
+                value={clause.text}
+                onChange={(e) => handleClauseChange(index, "text", e.target.value)}
+            ></textarea>
+        </div>
+    ))}
+    <button
+        className="mt-6 bg-gray-600 hover:text-lg text-white p-4 rounded-lg w-fit"
+        onClick={addClause}
+    >
+        Add Another Clause
+    </button>
+</div>
 
     </div>
   )
