@@ -69,13 +69,27 @@ const LeaseCreateForm = () => {
     getLandlordDetails();
   },[propertyID]);
 
-  console.log("landlord details : ", landlordDetails);
-  const fullName = landlordDetails?.landlordDetails?.userId?.fullName;
-  const email = landlordDetails?.landlordDetails?.userId?.email;
-  const phonenumber = landlordDetails?.landlordDetails?.userId?.phoneNumber;
-  console.log("landlord details : ", fullName);
-  console.log("landlord details : ", email  );
-  console.log("landlord details : ", phonenumber  );
+  useEffect(() => {
+    // Assuming landlordDetails is fetched from API
+    const fullName = landlordDetails?.landlordDetails?.userId?.fullName;
+    const email = landlordDetails?.landlordDetails?.userId?.email;
+    const phoneNumber = landlordDetails?.landlordDetails?.userId?.phoneNumber;
+  
+    // Update the form data with fetched values
+    setFormData((prevData) => ({
+      ...prevData,
+      lessorInfo: {
+        ...prevData.lessorInfo,
+        fullName: fullName || "", // Default to empty string if value is not available
+        email: email || "",
+        phoneNumber: phoneNumber || "",
+      },
+    }));
+  
+    console.log("landlord details : ", fullName);
+    console.log("landlord details : ", email);
+    console.log("landlord details : ", phoneNumber);
+  }, [landlordDetails]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -279,12 +293,133 @@ const LeaseCreateForm = () => {
         ],
         newClauses: [],
         rules:[
-              {
-                text:"No additional locks or other similar devices shall be attached to any door without Lessor's written consent.",
-                editable:false
-              },
-
+          {
+            text: "No additional locks or other similar devices shall be attached to any door without Lessor's written consent.",
+            editable: false,
+          },
+          {
+            text: "Lessee shall not install or operate any machinery, refrigeration or heating devices or use or permit onto the Premises any flammable fluids or materials which may be hazardous to life or property.",
+            editable: false,
+          },
+          {
+            text: "Lessee shall not install a waterbed, pool table, or any other unusually heavy item of furniture without prior written permission from Lessor.",
+            editable: false,
+          },
+          {
+            text: "Hallways, stairways and elevators shall not be obstructed or used for any purpose other than ingress and egress from the building. Children are not permitted to play in the common areas. Lessee may not store any items in the hallways or common areas of the building.",
+            editable: false,
+          },
+          {
+            text: "Operation of electrical appliances or other devices which interfere with radio or television reception is not permitted.",
+            editable: false,
+          },
+          {
+            text: "Deliveries and moving of furniture must be conducted at times permitted by Lessor.",
+            editable: false,
+          },
+          {
+            text: "Lessee may not barbeque or operate cooking equipment on porches or balconies.",
+            editable: false,
+          },
+          {
+            text: "Lessee shall not dispose of rubbish, rags, or other items which might clog toilets or sink drains into toilets or sink drains.",
+            editable: false,
+          },
+          {
+            text: "Lessee shall not place any signs or advertisements on the windows or within the property or otherwise upon the Building, if such signs are visible from the street.",
+            editable: false,
+          },
+          {
+            text: "Lessee shall dispose of garbage and refuse by securely bagging or wrapping same and disposing of it in designated garbage containers or incinerators. Lessee shall not allow garbage containers to overflow and shall see to it that garbage container lids are fully closed and secure at all times.",
+            editable: false,
+          },
+          {
+            text: "Lessee shall not interfere in any manner with the heating or lighting or other fixtures in the building nor run extension cords or electrical appliances in violation of the Building Code.",
+            editable: false,
+          },
+          {
+            text: "Lessor may bar individuals from the building and/or Lessee's Premises. All guests and invitees of Lessee shall observe all rules and regulations of the building. If these provisions are violated by guests, they may be barred and/or arrested for criminal trespass, after they have received a barred notice and then have been placed on a barred list by Lessor. Violation of this rule are grounds for termination of your tenancy.",
+            editable: false,
+          },
+          {
+            text: "Lessor will repair any appliance malfunction; however, Lessor is not responsible for loss resulting from a malfunction of an appliance. Lessee understands that appliances will malfunction occasionally and Lessee must make every effort to report any malfunction.",
+            editable: false,
+          },
+          {
+            text: "$50 per key will be charged to provide additional or replacement keys to the property.",
+            editable: false,
+          },
+          {
+            text: "If Lessee is locked out, Lessor will facilitate re-entry only during business hours at a minimal fee. If Lessee is locked-out during the weekend or at nighttime, it will be the Lessee's responsibility to contact a locksmith. Any cost incurred because of lockouts shall be borne by the Lessee.",
+            editable: false,
+          },
+          {
+            text: "Lessee must secure renter's insurance. Lessee assumes the risks of not having renters insurance. Lessor cannot be held responsible for any damage of the Lessee's personal property.",
+            editable: false,
+          },
+          {
+            text: "Lessor provides no storage.",
+            editable: false,
+          },
+          {
+            text: "Laundry. Lessee agrees to clean any lint filters and to keep the laundry area free of debris. Lessor shall not be liable for any personal injury or property damage arising from or relating to Lessee's use of any laundry facilities made available under this Lease.",
+            editable: false,
+          },
+          {
+            text: "The Premises to be occupied by the Lessee and members of the Lessee's household has been designated as a smoke-free living environment. The Lessee and members of the Lessee's household shall not smoke tobacco or marijuana anywhere in the Premises, or in the building in which the Premises is a part, or in any of the common areas or adjoining grounds of the building or Premises, nor shall the Lessee permit any guests or visitors under the control of the Lessee to smoke tobacco or marijuana on the property.",
+            editable: false,
+          },
+          {
+            text: "Lessee shall not clean or permit to be cleaned from the outside any windows in the Premises, unless the equipment and safety devices required by any and applicable federal, state and local laws, rules and regulations are used.",
+            editable: false,
+          },
+          {
+            text: "Lessee shall phone the fire department if a fire is suspected and the police department if Lessee believes a crime is being committed or has occurred.",
+            editable: false,
+          },
+          {
+            text: "Lessee acknowledges that lessee has read the Rules and Regulations and agrees to be bound by them.",
+            editable: false,
+          },
+          {
+            text: "Lessee(s) accepts full responsibility for their pet(s) and further agrees to: 1) take all measures necessary to insure that people in and around the premises are not harmed or disturbed by their pets; 2) Pay for all damages or extra wear-and-tear that may result from keeping such pets including repainting of apartment, and cleaning or replacement of carpets; 3) Dispose of waste and litter in properly sealed plastic bags; 4) House only those specific pets identified below. This permission cannot be extended without the written consent of the Landlord; 5) Hold Lessor free from all claims for damages and all additional expenses, including legal expenses, that may arise as a result of granting Lessee's request to house pet(s).",
+            editable: false,
+          },
         ],
+        newRules: [],
+
+        disclosures: {
+          habitability: {
+            isAware: false,
+            details: "",
+          },
+          leadPaint: {
+            isLead: false,
+            details: "",
+          },
+          mold: {
+            isMold: false,
+            details: "",
+          },
+          bedBug: {
+            issue: "",
+            otherDetails: "",
+          },
+          utilityDisclosureFile: null, // To store the uploaded file
+        },
+
+        lessorInfo: {
+          fullName: "",
+          email: "",
+          phoneNumber: "",
+          companyName: "",
+          companyPhone: "",
+          emergencyPhone: "",
+          lessorAddress: "",
+        },
+        termsAndAgreement: {
+          content:"The law firm of Gordon & Rees Scully Mansukhani, LLP Firm has prepared example residential leases Forms for publication on the Rentals site. These Forms are merely to provide information and examples for self-help purposes. The Firm strives to keep the Forms accurate, current and up-to-date. However, because the law changes rapidly, the Firm cannot guarantee that all of the information on the Rentals site is completely current. The law is different from jurisdiction to jurisdiction, and may be subject to interpretation by different courts. The law is a personal matter, and no Forms like the kind published on the Rentals site can fit every circumstance. Furthermore, the Forms are not legal advice and are not guaranteed to be correct, complete or up-to-date. Therefore, if you need legal advice for your specific problem, you must consult a licensed attorney in your area. Except as part of a Firm Legal Engagement (defined below), we do not review any information you input on the Forms for legal accuracy or sufficiency, draw legal conclusions, provide opinions about your selection of forms, or apply the law to the facts of your situation. If you need legal advice for a specific problem, you should consult with a licensed attorney. Use of the Forms or any other legal information published on the Rentals site is not a substitute for legal advice from a qualified attorney licensed to practice in an appropriate jurisdiction. Communications between you, the Firm, and/or Rentals may not be protected as privilege communications under the attorney-client privilege or work product doctrine. Also, if you submit questions to the Firm or Rentals, the communications between you and the individual who answers your question may not be protected as privileged communications under the attorney-client privilege or work product doctrine. Your use of the Forms does not create an attorney-client relationship between you and Gordon & Rees Scully Mansukhani, LLP, or between you and any Gordon & Rees Scully Mansukhani, LLP employee or representative, unless you specifically enter into a Legal Services Agreement executed by an authorized partner of the Firm. Unless you are otherwise represented by an attorney, including any external attorney, you represent yourself in any legal matter you undertake through use of our Forms."
+        },
 
     });
  
@@ -482,9 +617,154 @@ const menuItems = [
     // end of Clause
   
 
-    // handle rules
+
+      // Handling Rules
+
+const handleEditRuleClick = (index) => {
+  setFormData((prev) => {
+    const updatedRules = [...prev.rules];
+    updatedRules[index].editable = true; // Enable editing
+    return { ...prev, rules: updatedRules };
+  });
+};
+
+const handleSaveRuleClick = (index) => {
+  setFormData((prev) => {
+    const updatedRules = [...prev.rules];
+    updatedRules[index].editable = false; // Disable editing
+    return { ...prev, rules: updatedRules };
+  });
+};
+
+const handleCancelRuleClick = (index) => {
+  setFormData((prev) => {
+    const updatedRules = [...prev.rules];
+    updatedRules[index].editable = false; // Disable editing without saving
+    return { ...prev, rules: updatedRules };
+  });
+};
+
+const handleRuleChange = (index, value) => {
+  setFormData((prev) => {
+    const updatedRules = [...prev.rules];
+    updatedRules[index].text = value; // Update the text of the specific rule
+    return { ...prev, rules: updatedRules };
+  });
+};
+
+const addRule = () => {
+  setFormData((prev) => ({
+    ...prev,
+    newRules: [...prev.newRules, { name: "", text: "", editable: true }],
+  }));
+};
+
+const removeRule = (index) => {
+  setFormData((prev) => {
+    const updatedRules = prev.newRules.filter((_, i) => i !== index);
+    return { ...prev, newRules: updatedRules };
+  });
+};
+
+// Save Rule Function
+const saveRule = (index) => {
+  const updatedNewRules = [...formData.newRules];
+  const ruleToSave = updatedNewRules[index];
+
+  // Remove the saved rule from newRules and add it to the fixed rules list
+  setFormData((prev) => ({
+    ...prev,
+    rules: [...prev.rules, ruleToSave], // Add saved rule to fixed rules
+    newRules: updatedNewRules.filter((_, i) => i !== index), // Remove saved rule from newRules
+  }));
+
+  console.log("Rule saved:", ruleToSave);
+};
+
+// Handle New Rule Change
+const handleNewRuleChange = (index, field, value) => {
+  const updatedRules = [...formData.newRules];
+  updatedRules[index][field] = value;
+  setFormData({ ...formData, newRules: updatedRules });
+};
+
+// Display Rules Section
+
+// handling discloure section
+
+const handleCheckboxChangeDisclore = (event) => {
+  const { name, value } = event.target;
+  const isYes = value === "yes";
+
+  setFormData((prevData) => ({
+    ...prevData,
+    disclosures: {
+      ...prevData.disclosures,
+      [name]: {
+        ...prevData.disclosures[name],
+        isAware: isYes,
+      },
+    },
+  }));
+};
+
+const handleDetailsChange = (event, disclosureType) => {
+  const { value } = event.target;
+  setFormData((prevData) => ({
+    ...prevData,
+    disclosures: {
+      ...prevData.disclosures,
+      [disclosureType]: {
+        ...prevData.disclosures[disclosureType],
+        details: value,
+      },
+    },
+  }));
+};
+
+const handleDropdownChange = (event) => {
+  const { value } = event.target;
+  setFormData((prevData) => ({
+    ...prevData,
+    disclosures: {
+      ...prevData.disclosures,
+      bedBug: {
+        ...prevData.disclosures.bedBug,
+        issue: value,
+        otherDetails: value === "noIssues" ? "" : prevData.disclosures.bedBug.otherDetails,
+      },
+    },
+  }));
+};
+
+const handleOtherDetailsChange = (event) => {
+  const { value } = event.target;
+  setFormData((prevData) => ({
+    ...prevData,
+    disclosures: {
+      ...prevData.disclosures,
+      bedBug: {
+        ...prevData.disclosures.bedBug,
+        otherDetails: value,
+      },
+    },
+  }));
+};
+
+const handleFileUpload = (event) => {
+  const file = event.target.files[0];
+  setFormData((prevData) => ({
+    ...prevData,
+    disclosures: {
+      ...prevData.disclosures,
+      utilityDisclosureFile: file,
+    },
+  }));
+};
 
 
+
+// based on section dynamically it will change
 
   const handleChange = (section, field, value) => {
     setFormData((prevData) => ({
@@ -495,6 +775,8 @@ const menuItems = [
       },
     }));
   };
+
+
 
 const handleOptionChange = (option) => {
   setFormData((prev) => ({
@@ -521,14 +803,44 @@ const handleOptionChange = (option) => {
 
   
 
-  const handleSubmit = () => {
+  
+const handleSubmit = async () => {
+  try {
     console.log("Submitting Data:", formData);
+
+    // API call to submit form data
+    const response = await axios.post(
+      "http://localhost:8080/api/v1/getLeaseFormData", 
+      formData
+    );
+
+    console.log("response data : ", response);
+    // Handle successful submission
+    if (response.status === 200) {
+      Swal.fire({
+        icon: "success",
+        title: "Form Submitted",
+        text: "Your data has been successfully submitted.",
+      });
+      console.log("Response Data:", response.data);
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "Submission Warning",
+        text: "Form submitted, but something seems off. Please verify your data.",
+      });
+      console.warn("Warning Response:", response);
+    }
+  } catch (error) {
+    // Handle errors during submission
+    console.error("Error Submitting Data:", error);
     Swal.fire({
-      icon: "success",
-      title: "Form Submitted",
-      text: "Your data has been successfully submitted.",
+      icon: "error",
+      title: "Submission Failed",
+      text: "There was an issue submitting your data. Please try again.",
     });
-  };
+  }
+};
 
 
 
@@ -1292,8 +1604,90 @@ const handleOptionChange = (option) => {
               <div className="shadow-box p-6 border rounded-lg bg-white">
                 <div className="mb-4">
                   <h1 className="font-bold text-3xl text-mainColor">Rules</h1>
-                  
-                  <Rules/>
+
+                  {/* Display Fixed Rules */}
+                  {formData.rules.map((rule, index) => (
+                    <div key={index} className="shadow-md p-4 mb-4 bg-gray-100 rounded-lg">
+                      <div className="flex justify-between items-center">
+                        <label className="block font-bold text-lg text-gray-700">{index + 1}. Rule</label>
+                        {!rule.editable && (
+                          <button
+                            onClick={() => handleEditRuleClick(index)}
+                            className="text-blue-500 font-semibold"
+                          >
+                            <span className="text-2xl"> <FaRegEdit /> </span>
+                          </button>
+                        )}
+                      </div>
+
+                      {rule.editable ? (
+                        <div>
+                          
+                          <textarea
+                            className="w-full p-2 border-b-2 border-gray-400 outline-none focus:border-blue-500 mt-2"
+                            value={rule.text}
+                            onChange={(e) => handleRuleChange(index, e.target.value)}
+                          ></textarea>
+                          <div className="flex justify-end mt-2">
+                            <button
+                              onClick={() => handleSaveRuleClick(index)}
+                              className="bg-blue-500 text-white py-1 px-4 rounded-lg"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={() => handleCancelRuleClick(index)}
+                              className="bg-red-500 text-white py-1 px-4 ml-2 rounded-lg"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="mt-2">{rule.text}</p>
+                      )}
+                    </div>
+                  ))}
+
+                  {/* Display Added Rules */}
+                  {formData.newRules.map((rule, index) => (
+                    <div key={index} className="shadow-md p-4 mb-4 bg-white rounded-lg">
+                      <textarea
+                        className="w-full p-2 border-b-2 border-gray-400 outline-none focus:border-blue-500 mt-2"
+                        placeholder="Enter Rule Text"
+                        rows="4"
+                        value={rule.text}
+                        onChange={(e) => handleNewRuleChange(index, "text", e.target.value)}
+                      ></textarea>
+
+                      {/* Save Rule Button */}
+                      <div className="flex justify-between mt-4">
+                        <button
+                          className="bg-blue-500 text-white py-1 px-4 rounded-lg hover:bg-blue-600"
+                          onClick={() => saveRule(index)}
+                        >
+                          Save Rule
+                        </button>
+                        <button
+                          className="text-red-500 font-semibold hover:text-red-700"
+                          onClick={() => removeRule(index)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="mt-6">
+                    <button
+                      className="bg-green-500 text-white py-2 px-6 rounded-md hover:bg-green-600"
+                      onClick={addRule}
+                    >
+                      Add Rule
+                    </button>
+                  </div>
+
+
                 
 
                 <div className="flex justify-between mt-[50px]">
@@ -1332,7 +1726,192 @@ const handleOptionChange = (option) => {
                   <h1 className="font-bold text-3xl text-mainColor">Disclosures</h1>
                 </div>
                 {/* Disclosures Form */}
-                <Disclosures/>
+                <div className="flex flex-col gap-4">
+      {/* Conditions Affecting Habitability */}
+      <div className="flex flex-col m-2 space-y-2">
+        <h1 className="text-blue-900 font-semibold">Conditions Affecting Habitability</h1>
+        <p>
+          As the Lessor, you may be required to disclose any code violations, code enforcement
+          litigation, and/or compliance board proceedings during the previous 12 months.
+        </p>
+        <div className="flex flex-col space-y-4 ml-3">
+          <div className="flex items-center space-x-2">
+            <input
+              type="radio"
+              id="habitabilityYes"
+              name="habitability"
+              value="yes"
+              className="cursor-pointer"
+              onChange={handleCheckboxChangeDisclore}
+            />
+            <label htmlFor="habitabilityYes" className="text-gray-700 cursor-pointer">
+              Yes, I'm aware of conditions affecting habitability
+            </label>
+          </div>
+          {formData.disclosures.habitability.isAware && (
+            <textarea
+              placeholder="Please explain"
+              value={formData.disclosures.habitability.details}
+              onChange={(e) => handleDetailsChange(e, "habitability")}
+              className="mt-4 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ml-3"
+            ></textarea>
+          )}
+          <div className="flex items-center space-x-2">
+            <input
+              type="radio"
+              id="habitabilityNo"
+              name="habitability"
+              value="no"
+              className="cursor-pointer"
+              defaultChecked
+              onChange={handleCheckboxChangeDisclore}
+            />
+            <label htmlFor="habitabilityNo" className="text-gray-700 cursor-pointer">
+              No, I'm not aware of any conditions affecting habitability
+            </label>
+          </div>
+        </div>
+      </div>
+
+          
+      {/* Lead Paint Disclosure */}
+      <div className="flex flex-col m-2 space-y-2">
+        <h1 className="text-blue-900 font-semibold">Lead Paint Disclosure</h1>
+        <p>
+          Lessors must disclose the presence of known lead-based paint and/or lead-based paint
+          hazards in the dwelling.
+        </p>
+        <div className="flex flex-col space-y-4 ml-3">
+          <div className="flex items-center space-x-2">
+            <input
+              type="radio"
+              id="leadYes"
+              name="leadPaint"
+              value="yes"
+              className="cursor-pointer"
+              onChange={handleCheckboxChangeDisclore}
+            />
+            <label htmlFor="leadYes" className="text-gray-700 cursor-pointer">
+              Yes, I'm aware of lead issues
+            </label>
+          </div>
+          {formData.disclosures.leadPaint.isAware && (
+            <textarea
+              placeholder="Please explain"
+              value={formData.disclosures.leadPaint.details}
+              onChange={(e) => handleDetailsChange(e, "leadPaint")}
+              className="mt-4 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ml-3"
+            ></textarea>
+          )}
+          <div className="flex items-center space-x-2">
+            <input
+              type="radio"
+              id="leadNo"
+              name="leadPaint"
+              value="no"
+              className="cursor-pointer"
+              defaultChecked
+              onChange={handleCheckboxChangeDisclore}
+            />
+            <label htmlFor="leadNo" className="text-gray-700 cursor-pointer">
+              No, I'm not aware of lead issues
+            </label>
+          </div>
+        </div>
+      </div>
+
+
+      {/* Mold Issue Disclosure */}
+
+<div className="flex flex-col m-2 space-y-2">
+  <h1 className="text-blue-900 font-semibold">Mold Disclosure</h1>
+  <p>Lessors must disclose the presence of known mold hazards in the property.</p>
+  <div className="flex flex-col space-y-4 ml-3">
+    <div className="flex items-center space-x-2">
+      <input
+        type="radio"
+        id="moldYes"
+        name="moldIssue"
+        value="yes"
+        className="cursor-pointer"
+        onChange={handleCheckboxChangeDisclore}
+      />
+      <label htmlFor="moldYes" className="text-gray-700 cursor-pointer">
+        Yes, I'm aware of mold issues regarding this property
+      </label>
+    </div>
+    {formData.disclosures.mold.isAware && (
+      <textarea
+        placeholder="Please explain"
+        value={formData.disclosures.mold.details}
+        onChange={(e) => handleDetailsChange(e, "moldIssue")}
+        className="mt-4 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ml-3"
+      ></textarea>
+    )}
+    <div className="flex items-center space-x-2">
+      <input
+        type="radio"
+        id="moldNo"
+        name="moldIssue"
+        value="no"
+        className="cursor-pointer"
+        defaultChecked
+        onChange={handleCheckboxChangeDisclore}
+      />
+      <label htmlFor="moldNo" className="text-gray-700 cursor-pointer">
+        No, I'm not aware of mold issues regarding this property
+      </label>
+    </div>
+  </div>
+</div>
+
+
+
+      {/* Bed Bug Disclosure */}
+      <div className="flex flex-col m-2 space-y-2">
+        <h1 className="text-blue-900 font-semibold">Bed Bug Disclosure</h1>
+        <p>Provide the property’s bedbug infestation history.</p>
+        <div className="flex flex-col space-y-4 ml-3">
+          <select
+            id="bedBugDisclosure"
+            value={formData.disclosures.bedBug.issue}
+            onChange={handleDropdownChange}
+            className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="" disabled>
+              Select an option
+            </option>
+            <option value="noIssues">No known bed bug issues</option>
+            <option value="building">Bed bugs found in the building</option>
+            <option value="apartment">Bed bugs found in the apartment</option>
+            <option value="other">Other bed bug issues</option>
+          </select>
+          {(formData.disclosures.bedBug.issue === "building" ||
+            formData.disclosures.bedBug.issue === "apartment" ||
+            formData.disclosures.bedBug.issue === "other") && (
+            <textarea
+              placeholder="Please explain the issue"
+              value={formData.disclosures.bedBug.otherDetails}
+              onChange={handleOtherDetailsChange}
+              className="mt-4 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            ></textarea>
+          )}
+        </div>
+      </div>
+
+      {/* File Upload Section */}
+      <div className="flex flex-col m-2 space-y-2">
+        <h1 className="text-blue-900 font-semibold">Utility Disclosure</h1>
+        <p>Upload a bill for utility disclosure purposes:</p>
+        <input
+          type="file"
+          onChange={handleFileUpload}
+          className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+    </div>
+
+
                 <div className="flex justify-between mt-[50px]">
                     <button
                       onClick={() => setActiveItem(menuItems[menuItems.indexOf(activeItem) - 1])}
@@ -1397,91 +1976,145 @@ const handleOptionChange = (option) => {
           case "lessor info":
             return (
               <div className="shadow-box p-6 border rounded-lg bg-white">
-                <div className="">
+              <div>
                 <div className="mb-4">
                   <h1 className="font-bold text-3xl text-gray-700">Your Contact Information</h1>
                   <div className="m-3 flex flex-col gap-4">
-                      <div className="shadow-lg p-4 text-xl rounded-lg">If you would like to change the name, phone, or email address associated with this account, please do so from within your <span onClick={handleNavigation} className="underline text-mainColor cursor-pointer font-bold">Account Settings.</span></div>
-                      <div className="flex gap-4 w-full justify-between">
-                        <div className="w-1/2">
-                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                            <input type="text" id="name" value={fullName} readOnly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Name" required />
-                        </div>
-                        <div className="w-1/2">
-                            <div>
-                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                            <input type="email" id="email" value={email}  readOnly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Email" required />
-
-                            </div>           
-                        </div>
-                      </div> 
-                      <div className="w-full">
-                        <label for="phonenumber" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone Number</label>
-                        <input type="number" id="email"  value={phonenumber} readOnly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="phone number" required />
-                      </div>
-                 </div> 
-
-                  <div className="py-5">
-                    <h1 className="font-bold text-3xl text-gray-700">Company Info</h1>
-                    <div className="m-3 flex flex-col gap-4">
-                        <div className="shadow-lg p-4 text-xl rounded-lg">If you prefer not to have your personal name and phone number on the lease, you can enter your company information, which will be used instead. Your personal phone is still required to help us prevent fraud.</div>
-          
-                        <div className="w-full">
-                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company Name</label>
-                            <input type="text" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Name" required />
-                        </div>                      
-                        <div className="w-full">
-                          <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company Phone</label>
-                          <input type="number" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Email" required />
-                        </div>
-                    </div> 
-                  </div>
-
-                 <div className="py-5 flex flex-col gap-4">
-                  <h1 className="font-bold text-3xl text-gray-700">Emergency Line (optional)</h1>
-                  <div className="w-full space-y-2">
-                      <label for="name" class="block mb-2 text-lg  text-gray-500 dark:text-white">Phone where tenants can reach someone in a maintenance emergency</label>
-                      <input type="number" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="000-000-0000" required />
+                    <div className="shadow-lg p-4 text-xl rounded-lg">
+                      If you would like to change the name, phone, or email address associated with this account, please do so from within your 
+                      <span onClick={handleNavigation} className="underline text-mainColor cursor-pointer font-bold">Account Settings.</span>
                     </div>
+                    <div className="flex gap-4 w-full justify-between">
+                      <div className="w-1/2">
+                        <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                        <input
+                          type="text"
+                          id="name"
+                          value={formData.lessorInfo.fullName}
+                          readOnly
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="Name"
+                          required
+                        />
+                      </div>
+                      <div className="w-1/2">
+                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                        <input
+                          type="email"
+                          id="email"
+                          value={formData.lessorInfo.email}
+                          readOnly
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="Email"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="w-full">
+                      <label htmlFor="phoneNumber" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone Number</label>
+                      <input
+                        type="number"
+                        id="phoneNumber"
+                        value={formData.lessorInfo.phoneNumber}
+                        readOnly
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Phone number"
+                        required
+                      />
+                    </div>
+            
+                    <div className="py-5">
+                      <h1 className="font-bold text-3xl text-gray-700">Company Info</h1>
+                      <div className="m-3 flex flex-col gap-4">
+                        <div className="shadow-lg p-4 text-xl rounded-lg">
+                          If you prefer not to have your personal name and phone number on the lease, you can enter your company information, which will be used instead. Your personal phone is still required to help us prevent fraud.
+                        </div>
+                        <div className="w-full">
+                          <label htmlFor="companyName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company Name</label>
+                          <input
+                            type="text"
+                            id="companyName"
+                            value={formData.lessorInfo.companyName}
+                            onChange={e => handleChange('lessorInfo', 'companyName', e.target.value)}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Company Name"
+                          />
+                        </div>
+            
+                        <div className="w-full">
+                          <label htmlFor="companyPhone" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company Phone</label>
+                          <input
+                            type="number"
+                            id="companyPhone"
+                            value={formData.lessorInfo.companyPhone}
+                            onChange={e => handleChange('lessorInfo', 'companyPhone', e.target.value)}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Company Phone"
+                          />
+                        </div>
+                      </div>
+                    </div>
+            
+                    <div className="py-5 flex flex-col gap-4">
+                      <h1 className="font-bold text-3xl text-gray-700">Emergency Line (optional)</h1>
+                      <div className="w-full space-y-2">
+                        <label htmlFor="emergencyPhone" className="block mb-2 text-lg text-gray-500 dark:text-white">Phone where tenants can reach someone in a maintenance emergency</label>
+                        <input
+                          type="number"
+                          id="emergencyPhone"
+                          value={formData.lessorInfo.emergencyPhone}
+                          onChange={e => handleChange('lessorInfo', 'emergencyPhone', e.target.value)}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="000-000-0000"
+                        />
+                      </div>
+                    </div>
+            
+                    <div className="py-5 flex flex-col gap-4">
+                      <h1 className="font-bold text-3xl text-gray-700">Lessor Address (Home or Business)</h1>
+                      <h1 className="text-xl text-gray-500">A lessor address is required on all leases.</h1>
+                      <div className="w-full space-y-2">
+                        <label htmlFor="lessorAddress" className="block mb-2 text-lg text-gray-500 dark:text-white">Start typing the street address</label>
+                        <input
+                          type="text"
+                          id="lessorAddress"
+                          value={formData.lessorInfo.lessorAddress}
+                          onChange={e => handleChange('lessorInfo', 'lessorAddress', e.target.value)}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="Start typing..."
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between mt-[30px]">
+                      <button
+                        onClick={() => setActiveItem(menuItems[menuItems.indexOf(activeItem) - 1])}
+                        className="mt-6 bg-mainColor text-white p-2 w-[100px] rounded-lg"
+                      >       
+                          Back
+                      </button>
+                      <button
+                         onClick={handleNext}
+                        className="mt-6 bg-mainColor text-white p-2 w-[150px] rounded-lg"
+                      >
+                        I Agree
+                      </button>    
+                    </div>
+
+                    {/* Terms of Use */}
+                    <div className="text-center p-4 text-sm text-gray-600">
+                        <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer ">Terms of use.</span> Lease templates and their 
+                        contents are not guarented, may not be suitable for your circumstances, and should be independently verified with your professional advisors
+                        prior to use.
+                        </p>
+                    </div>
+
                   </div>
-
-                  <div className="py-5 flex flex-col gap-4">
-                    <h1 className="font-bold text-3xl text-gray-700">Lessor Address (Home or Business)</h1>
-                    <h1 className=" text-xl text-gray-500">A lessor address is required on all leases.</h1>
-                    <div className="w-full space-y-2">
-                      <label for="name" class="block mb-2 text-lg  text-gray-500 dark:text-white">Start typing the street address</label>
-                      <input type="text" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="start typing ..." required />
-                    </div> 
-                  </div>
-
-
-                  <div className="flex justify-between mt-[50px]">
-                    <button
-                      onClick={() => setActiveItem(menuItems[menuItems.indexOf(activeItem) - 1])}
-                      className="mt-6 bg-mainColor text-white p-2 w-[100px] rounded-lg"
-                    >       
-                        Back
-                    </button>
-                    <button
-                      onClick={handleNext}
-                      className="mt-6 bg-mainColor text-white p-2 w-[150px] rounded-lg"
-                    >
-                      Save & Next
-                    </button>    
-                  </div>
-
-                   {/* Terms of Use */}
-                  <div className="text-center p-4 text-sm text-gray-600">
-                      <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer ">Terms of use.</span> Lease templates and their 
-                      contents are not guarented, may not be suitable for your circumstances, and should be independently verified with your professional advisors
-                      prior to use.
-                      </p>
-                  </div>
-
                 </div>
-                </div>
-                {/* Lessor Info Form */}
               </div>
+            </div>
+  
+
             );
 
           case "terms agreement":
@@ -1509,11 +2142,7 @@ const handleOptionChange = (option) => {
                             {/* Modal Content */}
                             <div className="p-6">
                               <p className="text-xl">
-                                The law firm of Gordon & Rees Scully Mansukhani, LLP (the "Firm") has prepared example residential leases ("Forms") for
-                                publication on the Rentals site. These Forms are merely to provide information and examples for self-help purposes. 
-                                The Firm strives to keep the Forms accurate, current and up-to-date. However, because the law changes rapidly, 
-                                the Firm cannot guarantee that all of the information on the Rentals site is completely current. The law is different from jurisdiction to jurisdiction, and may be subject to interpretation by different courts. The law is a personal matter, and no Forms like the kind published on the Rentals site can fit every circumstance. Furthermore, the Forms are not legal advice and are not guaranteed to be correct, complete or up-to-date. Therefore, if you need legal advice for your specific problem, 
-                                you must consult a licensed attorney in your area. Except as part of a Firm Legal Engagement (defined below), we do not review any information you input on the Forms for legal accuracy or sufficiency, draw legal conclusions, provide opinions about your selection of forms, or apply the law to the facts of your situation. If you need legal advice for a specific problem, you should consult with a licensed attorney. Use of the Forms or any other legal information published on the Rentals site is not a substitute for legal advice from a qualified attorney licensed to practice in an appropriate jurisdiction. Communications between you, the Firm, and/or Rentals may not be protected as privilege communications under the attorney-client privilege or work product doctrine. Also, if you submit questions to the Firm or Rentals, the communications between you and the individual who answers your question may not be protected as privileged communications under the attorney-client privilege or work product doctrine. Your use of the Forms does not create an attorney-client relationship between you and Gordon & Rees Scully Mansukhani, LLP, or between you and any Gordon & Rees Scully Mansukhani, LLP employee or representative, unless you specifically enter into a Legal Services Agreement executed by an authorized partner of the Firm. Unless you are otherwise represented by an attorney, including any external attorney, you represent yourself in any legal matter you undertake through use of our Forms.
+                                  {formData.termsAndAgreement.content}                
                               </p>
                             </div>
                           </div>
@@ -1529,7 +2158,8 @@ const handleOptionChange = (option) => {
                         Back
                     </button>
                     <button
-                      onClick={handleNext}
+                     
+                      onClick={handleSubmit}
                       className="mt-6 bg-mainColor text-white p-2 w-[150px] rounded-lg"
                     >
                       I Agree

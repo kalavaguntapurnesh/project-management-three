@@ -125,13 +125,13 @@ console.log("properties log :: ", properties);
   };
 
   useEffect(() => {
-    if (roleName === "landlord") {
-      getProperties(); // Fetch properties for landlords
-    } else if (roleName === "tenant") {
-      getAllActiveProperties(); // Fetch active properties for tenants
-    }
-    // eslint-disable-next-line
-  }, [roleName]);
+  if (roleName === "landlord") {
+    getProperties(); // Fetch properties for landlords
+  } else if (roleName === "tenant") {
+    getAllActiveProperties(); // Fetch active properties for tenants
+  }
+  // eslint-disable-next-line
+}, [roleName]);
  
 
   console.log("get all vacant with no repairs: ",allActiveProperties);

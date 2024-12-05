@@ -181,28 +181,26 @@ const Layout = ({ children }) => {
                       </div>
                     </div>
 
-                    <div className="mt-2">
-                      {properties && properties.length > 0 ? (
-                        <div className="flex flex-col gap-1 p-4">
-                          {properties
-                            .slice(
-                              0,
-                              properties.length > 3 ? 2 : properties.length
-                            )
-                            .map((property) => (
-                              <ul key={property._id}>
-                                <li className="cursor-pointer flex items-center text-center text-gray-600 w-[100%] cursor-pointer py-2 px-2 overflow-hidden">
-                                  <FaHome />
-                                  <h1 className="ml-2">
-                                    {property.doorNumber}
-                                  </h1>
-                                  <h1 className="ml-2">
-                                    {property.streetName}
-                                  </h1>
-                                </li>
-                              </ul>
-                            ))}
-                        </div>
+                    <div className="mt-2 h-50 overflow-y-scroll">
+                    {properties && properties.length > 0 ? (
+                      <div className="flex flex-col gap-1 p-4">
+                        {properties
+                          .slice(0, properties.length > 3 ? 2 : properties.length)
+                          .map((property, index) => (
+                            <ul key={property._id}>
+                              <li
+                                className={`cursor-pointer flex items-center text-center text-gray-600 w-[100%] py-2 px-2 overflow-hidden h-[70px] rounded-lg ${
+                                  index % 2 === 0 ? "bg-gray-600 text-white" : "bg-gray-400 text-white"
+                                }`}
+                              >
+                                <FaHome />
+                                <h1 className="ml-2">{property.doorNumber}</h1>
+                                <h1 className="ml-2">{property.streetName}</h1>
+                              </li>
+                            </ul>
+                          ))}
+                      </div>
+ 
                       ) : (
                         <p className="text-gray-500 text-center mt-4">...</p>
                       )}
