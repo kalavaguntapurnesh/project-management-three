@@ -191,7 +191,7 @@ const Layout = ({ children }) => {
                             )
                             .map((property) => (
                               <ul key={property._id}>
-                                <li className="cursor-pointer flex items-center text-center text-gray-600 w-[100%] py-2 px-2 overflow-hidden">
+                                <li className="cursor-pointer flex items-center text-center text-gray-600 w-[100%] cursor-pointer py-2 px-2 overflow-hidden">
                                   <FaHome />
                                   <h1 className="ml-2">
                                     {property.doorNumber}

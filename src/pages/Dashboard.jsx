@@ -91,11 +91,7 @@ const Dashboard = () => {
     //eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    getProperties();
-    //eslint-disable-next-line
-  }, []);
-
+ 
 console.log("properties log :: ", properties);
 
   const [allActiveProperties, setAllActiveProperties] = useState(null);
@@ -129,10 +125,13 @@ console.log("properties log :: ", properties);
   };
 
   useEffect(() => {
-    getAllActiveProperties();
-
-    //eslint-disable-next-line
-  }, []);
+    if (roleName === "landlord") {
+      getProperties(); // Fetch properties for landlords
+    } else if (roleName === "tenant") {
+      getAllActiveProperties(); // Fetch active properties for tenants
+    }
+    // eslint-disable-next-line
+  }, [roleName]);
  
 
   console.log("get all vacant with no repairs: ",allActiveProperties);
