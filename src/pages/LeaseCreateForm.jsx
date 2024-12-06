@@ -802,46 +802,48 @@ const handleOptionChange = (option) => {
   };
 
   
-
+  const handleSubmit = async () => {
+    try {
+      const dataToSubmit = {
+        ...formData,       // Add other form data
+        propertyId: propertyID, // Replace with the actual property ID
+      };
   
-const handleSubmit = async () => {
-  try {
-    console.log("Submitting Data:", formData);
-
-    // API call to submit form data
-    const response = await axios.post(
-      "http://localhost:8080/api/v1/getLeaseFormData", 
-      formData
-    );
-
-    console.log("response data : ", response);
-    // Handle successful submission
-    if (response.status === 200) {
+      console.log("Submitting Data:", dataToSubmit);
+  
+      // API call to submit form data
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/addingLeaseFormData", // Endpoint to post data
+        dataToSubmit // Sending the formData along with propertyId
+      );
+  
+      console.log("Response Data:", response);
+  
+      // Handle successful submission
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Form Submitted",
+          text: "Your data has been successfully submitted.",
+        });
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: "Submission Warning",
+          text: "Form submitted, but something seems off. Please verify your data.",
+        });
+        console.warn("Warning Response:", response);
+      }
+    } catch (error) {
+      // Handle errors during submission
+      console.error("Error Submitting Data:", error);
       Swal.fire({
-        icon: "success",
-        title: "Form Submitted",
-        text: "Your data has been successfully submitted.",
+        icon: "error",
+        title: "Submission Failed",
+        text: "There was an issue submitting your data. Please try again.",
       });
-      console.log("Response Data:", response.data);
-    } else {
-      Swal.fire({
-        icon: "warning",
-        title: "Submission Warning",
-        text: "Form submitted, but something seems off. Please verify your data.",
-      });
-      console.warn("Warning Response:", response);
     }
-  } catch (error) {
-    // Handle errors during submission
-    console.error("Error Submitting Data:", error);
-    Swal.fire({
-      icon: "error",
-      title: "Submission Failed",
-      text: "There was an issue submitting your data. Please try again.",
-    });
-  }
-};
-
+  };
 
 
   const renderFormContent = () => {
@@ -1991,7 +1993,7 @@ const handleSubmit = async () => {
                           type="text"
                           id="name"
                           value={formData.lessorInfo.fullName}
-                          readOnly
+                          onChange={e => handleChange('lessorInfo', 'fullName', e.target.value)}
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="Name"
                           required
@@ -2003,7 +2005,7 @@ const handleSubmit = async () => {
                           type="email"
                           id="email"
                           value={formData.lessorInfo.email}
-                          readOnly
+                          onChange={e => handleChange('lessorInfo', 'email', e.target.value)}
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="Email"
                           required
@@ -2016,7 +2018,7 @@ const handleSubmit = async () => {
                         type="number"
                         id="phoneNumber"
                         value={formData.lessorInfo.phoneNumber}
-                        readOnly
+                        onChange={e => handleChange('lessorInfo', 'phoneNumber', e.target.value)}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Phone number"
                         required
