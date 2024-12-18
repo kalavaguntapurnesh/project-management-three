@@ -22,8 +22,8 @@ const Dashboard = () => {
     try {
       const response = await axios.post(
         "http://localhost:8080/api/v1/getUserData",
-        // https://rma1-backend.onrender.com
-        // "https://rma1-backend.onrender.com/api/v1/getUserData",
+       
+        // "https://rma1-backend-1.onrender.com/api/v1/getUserData",
         { userId: user?._id },
 
         {
@@ -63,7 +63,7 @@ const Dashboard = () => {
     try {
       const response = await axios.post(
         "http://localhost:8080/api/v1/getProperties",
-        // "https://rma1-backend.onrender.com/api/v1/getProperties",
+        // "https://rma1-backend-1.onrender.com/api/v1/getProperties",
         { userId: params.id },
         {
           headers: {
@@ -100,7 +100,7 @@ console.log("properties log :: ", properties);
     try {
       const response = await axios.get(
         "http://localhost:8080/api/v1/getAllActiveProperties",
-        // "https://rma1-backend.onrender.com/api/v1/getAllActiveProperties",
+        // "https://rma1-backend-1.onrender.com/api/v1/getAllActiveProperties",
         { userId: params.id },
         {
           headers: {
@@ -130,7 +130,7 @@ console.log("properties log :: ", properties);
   } else if (roleName === "tenant") {
     getAllActiveProperties(); // Fetch active properties for tenants
   }
-  // eslint-disable-next-line
+
 }, [roleName]);
  
 
@@ -148,7 +148,7 @@ console.log("properties log :: ", properties);
     try {
       const response = await axios.post(
         "http://localhost:8080/api/v1/getLandlordLeaseTerms",
-        // "https://rma1-backend.onrender.com/api/v1/getLandlordLeaseTerms",
+        // "https://rma1-backend-1.onrender.com/api/v1/getLandlordLeaseTerms",
         { propertyId }, 
         {
           headers: {

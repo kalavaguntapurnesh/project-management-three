@@ -8,6 +8,7 @@ export default {
         mainColor: "rgb(99 102 241)",
         headingColor: "#19191B",
         sideHeading: "#474749",
+        termsParagraph: "text-sm text-blue-900"
       },
     },
   },

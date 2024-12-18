@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaRegEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 import { MdAddHomeWork } from "react-icons/md";
 import Swal from "sweetalert2";
 // import { FaRegEdit } from "react-icons/fa";
@@ -27,6 +28,8 @@ const LeaseCreateForm = () => {
     try {
       const response = await axios.post(
         "http://localhost:8080/api/v1/getLeaseProperty",
+        
+        // "https://rma1-backend-1.onrender.com/api/v1/getLeaseProperty",
         {
           propertyId: propertyID,
         }
@@ -49,7 +52,9 @@ const LeaseCreateForm = () => {
 
   const getLandlordDetails = async()=>{
     try{
-      const response = await axios.post("http://localhost:8080/api/v1/getLandlordDetailsInTenantDashboard",
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/getLandlordDetailsInTenantDashboard",
+        // "https://rma1-backend-1.onrender.com/api/v1/getLandlordDetailsInTenantDashboard",
         {
           propertyId: propertyID,
         }
@@ -592,6 +597,16 @@ const menuItems = [
       });
     };
 
+      // Handle Delete Clause (for fixed clauses)
+  const handleDeleteClause = (index) => {
+    setFormData((prev) => {
+        const updatedClauses = prev.clauses.filter((_, i) => i !== index);
+        return { ...prev, clauses: updatedClauses };
+    });
+
+  };
+
+
     // Save Clause Function
     const saveClause = (index) => {
       const updatedNewClauses = [...formData.newClauses];
@@ -762,7 +777,14 @@ const handleFileUpload = (event) => {
   }));
 };
 
-
+     // Handle Delete Rule (for fixed rules)
+     const handleDeleteRule = (index) => {
+      setFormData((prev) => {
+          const updatedRule = prev.rules.filter((_, i) => i !== index);
+          return { ...prev, rules: updatedRule };
+      });
+  
+    };
 
 // based on section dynamically it will change
 
@@ -930,7 +952,7 @@ const handleOptionChange = (option) => {
               <p>
                 Your use lease tools is subject to our{" "}
                 <span className="text-mainColor underline text-xl cursor-pointer ">
-                  Terms of use.
+                <Link to='/TermsAndConditions'>Terms of use.</Link>
                 </span>{" "}
                 Lease templates and their contents are not guaranteed, may not be
                 suitable for your circumstances, and should be independently verified
@@ -1065,7 +1087,8 @@ const handleOptionChange = (option) => {
 
              {/* Terms of Use */}
             <div className="text-center p-4 text-sm text-gray-600">
-                <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer ">Terms of use.</span> Lease templates and their 
+                <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer "><Link to='/TermsAndConditions'>Terms of use.</Link>
+                </span> Lease templates and their 
                 contents are not guarented, may not be suitable for your circumstances, and should be independently verified with your professional advisors
                 prior to use.
                 </p>
@@ -1471,7 +1494,7 @@ const handleOptionChange = (option) => {
 
                 {/* Terms of Use */}
                 <div className="text-center p-4 text-sm text-gray-600">
-                    <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer ">Terms of use.</span> Lease templates and their 
+                    <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer "><Link to='/TermsAndConditions'>Terms of use.</Link></span> Lease templates and their 
                     contents are not guarented, may not be suitable for your circumstances, and should be independently verified with your professional advisors
                     prior to use.
                     </p>
@@ -1488,15 +1511,20 @@ const handleOptionChange = (option) => {
               {formData.clauses.map((clause, index) => (
                 <div key={index} className="shadow-md p-4 mb-4 bg-gray-100 rounded-lg">
                   <div className="flex justify-between items-center">
-                    <label className="block font-bold text-xl text-gray-700">{index + 1}. {clause.name}</label>
-                    {!clause.editable && (
-                      <button
-                        onClick={() => handleEditClick(index)}
-                        className="text-blue-500 font-semibold"
-                      >
-                        <span className="text-2xl"> < FaRegEdit /> </span>
-                      </button>
-                    )}
+                      <label className="block font-bold text-xl text-gray-700">{index + 1}. {clause.name}</label>
+                      <div className="flex gap-3">
+                        {!clause.editable && (
+                          <button 
+                            onClick={() => handleEditClick(index)}
+                            className="text-blue-500 font-semibold">
+                            <span className="text-2xl"> < FaRegEdit /> </span>
+                          </button>
+                        )}
+                        <button
+                        onClick={() => handleDeleteClause(index)}>
+                        <span className="text-3xl text-blue-500"><MdDelete /></span>
+                        </button>
+                     </div>
                   </div>
           
                   {clause.editable ? (
@@ -1593,7 +1621,7 @@ const handleOptionChange = (option) => {
 
                 {/* Terms of Use */}
                 <div className="text-center p-4 text-sm text-gray-600">
-                    <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer ">Terms of use.</span> Lease templates and their 
+                    <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer "><Link to='/TermsAndConditions'>Terms of use.</Link></span> Lease templates and their 
                     contents are not guarented, may not be suitable for your circumstances, and should be independently verified with your professional advisors
                     prior to use.
                     </p>
@@ -1612,14 +1640,20 @@ const handleOptionChange = (option) => {
                     <div key={index} className="shadow-md p-4 mb-4 bg-gray-100 rounded-lg">
                       <div className="flex justify-between items-center">
                         <label className="block font-bold text-lg text-gray-700">{index + 1}. Rule</label>
-                        {!rule.editable && (
+                        <div className="flex gap-3">
+                          {!rule.editable && (
+                            <button
+                              onClick={() => handleEditRuleClick(index)}
+                              className="text-blue-500 font-semibold"
+                            >
+                              <span className="text-2xl"> <FaRegEdit /> </span>
+                            </button>
+                          )}
                           <button
-                            onClick={() => handleEditRuleClick(index)}
-                            className="text-blue-500 font-semibold"
-                          >
-                            <span className="text-2xl"> <FaRegEdit /> </span>
+                            onClick={() => handleDeleteRule(index)}>
+                            <span className="text-3xl text-blue-500"><MdDelete /></span>
                           </button>
-                        )}
+                        </div>
                       </div>
 
                       {rule.editable ? (
@@ -1710,7 +1744,7 @@ const handleOptionChange = (option) => {
 
                 {/* Terms of Use */}
                 <div className="text-center p-4 text-sm text-gray-600">
-                    <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer ">Terms of use.</span> Lease templates and their 
+                    <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer "><Link to='/TermsAndConditions'>Terms of use.</Link></span> Lease templates and their 
                     contents are not guarented, may not be suitable for your circumstances, and should be independently verified with your professional advisors
                     prior to use.
                     </p>
@@ -1931,7 +1965,7 @@ const handleOptionChange = (option) => {
 
                 {/* Terms of Use */}
                 <div className="text-center p-4 text-sm text-gray-600">
-                    <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer ">Terms of use.</span> Lease templates and their 
+                    <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer "><Link to='/TermsAndConditions'>Terms of use.</Link></span> Lease templates and their 
                     contents are not guarented, may not be suitable for your circumstances, and should be independently verified with your professional advisors
                     prior to use.
                     </p>
@@ -1944,7 +1978,64 @@ const handleOptionChange = (option) => {
               <div className="shadow-box p-6 border rounded-lg bg-white">
                 <div className="mb-4">
                   <h1 className="font-bold text-3xl text-mainColor">Attachments</h1>
-                  <Attachments/>
+                  <div>
+       <div className='flex justify-end '>
+            <div className='w-1/2 p-4 m-4 justify-end shadow-lg rounded-lg'>
+                <h1 className='text-xl  font-bold uppercase text-blue-900 flex items-center justify-center cursor-pointer'>restore original attachments</h1>
+            </div>
+       </div>
+
+        <div className='flex justify-between mt-5'>
+            <div className='flex flex-col gap-1'>
+                <h1 className='text-xl '>Utility Disclosure</h1>
+                <h1 className='text-xl text-gray-400'>Status</h1>
+            </div>
+            <div className="p-3 text-xl font-bold uppercase text-blue-900 flex items-center justify-center cursor-pointer">
+                <label
+                    htmlFor="file-upload"
+                    className="bg-blue-900 text-white px-4 py-3 rounded-lg hover:bg-blue-900 cursor-pointer"
+                >
+                    Upload Now
+                </label>
+                <input
+                    id="file-upload"
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => console.log(e.target.files)}
+                />
+            </div>
+        </div>
+
+        <div className='flex justify-between'>
+            <div className='flex flex-col gap-1'>
+                <h1 className='text-xl '>Flood Insurance Disclosure</h1>
+                <div className='flex gap-2'>
+                    <h1 className='text-xl text-gray-400 cursor-pointer hover:text-black'>Rename</h1>
+                    {/* <div className='w-1 bg-blue-900 h-6'></div> */}
+                    <h1 className='text-xl text-gray-400 cursor-pointer hover:text-black'>Download</h1>
+                </div>
+            </div>
+            <div className="p-4 text-xl font-bold uppercase text-red-600 flex items-center justify-center cursor-pointer">
+                <button
+                    className="shadow-lg text-red-500 px-5 py-3 rounded-lg hover:text-red-700 cursor-pointer"
+                >
+                    Remove
+                </button>
+            </div>
+        </div>
+
+        <div className="p-3 text-xl  flex flex-col items-center justify-center cursor-pointer w-full">
+            <label className='text-start'>Choose Other files</label>
+            <input
+                type="file"
+                placeholder='choose other files'
+                className="w-full border border-gray-300 rounded-lg p-2 cursor-pointer text-gray-600 file:cursor-pointer file:bg-blue-900 file:text-white file:rounded-lg file:py-2 file:px-4 file:border-none file:hover:bg-blue-700"
+            />
+        </div>
+          
+
+    </div>
+
 
                   <div className="flex justify-between mt-[50px]">
                     <button
@@ -1963,7 +2054,7 @@ const handleOptionChange = (option) => {
 
                 {/* Terms of Use */}
                 <div className="text-center p-4 text-sm text-gray-600">
-                    <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer ">Terms of use.</span> Lease templates and their 
+                    <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer "><Link to='/TermsAndConditions'>Terms of use.</Link></span> Lease templates and their 
                     contents are not guarented, may not be suitable for your circumstances, and should be independently verified with your professional advisors
                     prior to use.
                     </p>
@@ -2099,13 +2190,13 @@ const handleOptionChange = (option) => {
                          onClick={handleNext}
                         className="mt-6 bg-mainColor text-white p-2 w-[150px] rounded-lg"
                       >
-                        I Agree
+                        Next
                       </button>    
                     </div>
 
                     {/* Terms of Use */}
                     <div className="text-center p-4 text-sm text-gray-600">
-                        <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer ">Terms of use.</span> Lease templates and their 
+                        <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer "><Link to='/TermsAndConditions'>Terms of use.</Link></span> Lease templates and their 
                         contents are not guarented, may not be suitable for your circumstances, and should be independently verified with your professional advisors
                         prior to use.
                         </p>
@@ -2126,7 +2217,7 @@ const handleOptionChange = (option) => {
                  
                   <div className="text-2xl font-semibold text-mainColor">Please agree to the following before creating your lease.</div>
                   <div className="text-xl text-gray-600">By clicking "I agree", you acknowledge that you have read, understand, have had the opportunity to consult with counsel of your choosing, 
-                    and agree to the <span className="cursor-pointer text-blue-900 text-2xl font-bold" onClick={handleOpenModal}>provisions</span> stated herein.</div>
+                    and agree to the <span className="cursor-pointer text-blue-900 text-2xl font-bold underline hover:text-blue-500" onClick={handleOpenModal}>provisions</span> stated herein.</div>
                 </div>
 
                  {/* Modal */}
@@ -2164,9 +2255,18 @@ const handleOptionChange = (option) => {
                       onClick={handleSubmit}
                       className="mt-6 bg-mainColor text-white p-2 w-[150px] rounded-lg"
                     >
-                      I Agree
+                      I Agree & submit
                     </button>    
                   </div>
+
+                  {/* Terms of Use */}
+                  <div className="text-center p-4 text-sm text-gray-600">
+                      <p>Your use lease tools is subject to our <span className="text-mainColor underline text-xl cursor-pointer "><Link to='/TermsAndConditions'>Terms of use.</Link></span> Lease templates and their 
+                      contents are not guarented, may not be suitable for your circumstances, and should be independently verified with your professional advisors
+                      prior to use.
+                      </p>
+                  </div>
+
               </div>
             );
           default:

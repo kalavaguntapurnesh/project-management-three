@@ -27,10 +27,8 @@ const Login = () => {
     }
     axios
       .post(
-        // "https://backend-six-kappa-64.vercel.app/auth/login",
-        // "https://backend-six-kappa-64.vercel.app/auth/login",
         "http://localhost:8080/api/v1/login",
-        // "https://rma1-backend.onrender.com/api/v1/login",
+        // "https://rma1-backend-1.onrender.com/api/v1/login",
         {
           email,
           password,
