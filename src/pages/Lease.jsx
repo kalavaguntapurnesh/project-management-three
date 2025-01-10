@@ -20,7 +20,8 @@ const Lease = () => {
   const getPropertyDetails = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/getLeaseProperty",
+        // "http://localhost:8080/api/v1/getLeaseProperty",
+        "https://rma1-backend-1.onrender.com/api/v1/getLeaseProperty",
         { propertyId: propertyID }
       );
 
@@ -52,7 +53,8 @@ const Lease = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/v1/uploadLeaseAgreement',
+        // 'http://localhost:8080/api/v1/uploadLeaseAgreement',
+        'https://rma1-backend-1.onrender.com/api/v1/uploadLeaseAgreement',
         formData,
         {
           headers: {
@@ -79,7 +81,8 @@ const Lease = () => {
   useEffect(() => {
     const fetchUploadedFiles = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/v1/getLeaseFiles');
+        // const response = await axios.get('http://localhost:8080/api/v1/getLeaseFiles');
+        const response = await axios.get('https://rma1-backend-1.onrender.com/api/v1/getLeaseFiles');
         if (response.data && response.data.success) {
           setUploadedFiles(response.data.data);
         } else {

@@ -46,8 +46,8 @@ const Layout = ({ children }) => {
   const getProperties = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/getProperties",
-        // "https://rma1-backend-1.onrender.com/api/v1/getProperties",
+        // "http://localhost:8080/api/v1/getProperties",
+        "https://rma1-backend-1.onrender.com/api/v1/getProperties",
         { userId: params.id },
         {
           headers: {
@@ -186,7 +186,7 @@ const Layout = ({ children }) => {
                     {properties && properties.length > 0 ? (
                       <div className="flex flex-col gap-1 p-4">
                         {properties
-                          .slice(0, properties.length > 3 ? 2 : properties.length)
+                          .slice(0, properties.length > 2 ? 2 : properties.length)
                           .map((property, index) => (
                             <ul key={property._id}>
                               <li
