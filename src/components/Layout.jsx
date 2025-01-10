@@ -47,7 +47,7 @@ const Layout = ({ children }) => {
     try {
       const response = await axios.post(
         // "http://localhost:8080/api/v1/getProperties",
-        "https://rma1-backend-1.onrender.com/api/v1/getProperties",
+        "https://rentals-backend-three.onrender.com/api/v1/getProperties",
         { userId: params.id },
         {
           headers: {

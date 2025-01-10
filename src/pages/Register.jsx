@@ -44,8 +44,8 @@ const Register = () => {
       // Make API request to register the user
       axios
         .post(
-          "http://localhost:8080/api/v1/registerUser",
-          // "https://rma1-backend-1.onrender.com/api/v1/registerUser",
+          // "http://localhost:8080/api/v1/registerUser",
+          "https://rentals-backend-three.onrender.com/api/v1/registerUser",
           {
             email,
             password,

@@ -23,7 +23,7 @@ const AddTenantLeaseAgreement = () => {
     try {
       const res = await axios.post(
         // `http://localhost:8080/api/v1/addTenantLeaseAgreement?landlordLeaseAgreementId=${landlordLeaseAgreementID}&propertyId=${propertyID}&tenantId=${customerID}`,
-        `https://rma1-backend-1.onrender.com/api/v1/addTenantLeaseAgreement?landlordLeaseAgreementId=${landlordLeaseAgreementID}&propertyId=${propertyID}&tenantId=${customerID}`,
+        `https://rentals-backend-three.onrender.com/api/v1/addTenantLeaseAgreement?landlordLeaseAgreementId=${landlordLeaseAgreementID}&propertyId=${propertyID}&tenantId=${customerID}`,
         
         values,
         {
@@ -43,7 +43,7 @@ const AddTenantLeaseAgreement = () => {
         const [tenantRes, landlordRes] = await Promise.all([
           axios.post(
             // `http://localhost:8080/api/v1/updateTenantDetailsInLandlordDashboard`,
-            `https://rma1-backend-1.onrender.com/api/v1/updateTenantDetailsInLandlordDashboard`,
+            `https://rentals-backend-three.onrender.com/api/v1/updateTenantDetailsInLandlordDashboard`,
             
             { propertyId: propertyID, tenantId: customerID },
             {
@@ -54,7 +54,7 @@ const AddTenantLeaseAgreement = () => {
           ),
           axios.post(
             // `http://localhost:8080/api/v1/getLandlordDetailsInTenantDashboard`,
-            `https://rma1-backend-1.onrender.com/api/v1/getLandlordDetailsInTenantDashboard`,
+            `https://rentals-backend-three.onrender.com/api/v1/getLandlordDetailsInTenantDashboard`,
             
             { propertyId: propertyID },
             {

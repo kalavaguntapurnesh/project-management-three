@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children }) => {
       // console.log("Called the API");
       const response = await axios.post(
         // "http://localhost:8080/api/v1/getUserData",
-        "https://backend-syndeo.onrender.com/api/v1/getUserData",
+        "https://rentals-backend-three.onrender.com/api/v1/getUserData",
         {
           token: localStorage.getItem("token"),
         },

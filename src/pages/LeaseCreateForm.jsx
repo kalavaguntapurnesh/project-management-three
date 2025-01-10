@@ -29,7 +29,7 @@ const LeaseCreateForm = () => {
       const response = await axios.post(
         // "http://localhost:8080/api/v1/getLeaseProperty",
         
-        "https://rma1-backend-1.onrender.com/api/v1/getLeaseProperty",
+        "https://rentals-backend-three.onrender.com/api/v1/getLeaseProperty",
         {
           propertyId: propertyID,
         }
@@ -54,7 +54,7 @@ const LeaseCreateForm = () => {
     try{
       const response = await axios.post(
         // "http://localhost:8080/api/v1/getLandlordDetailsInTenantDashboard",
-        "https://rma1-backend-1.onrender.com/api/v1/getLandlordDetailsInTenantDashboard",
+        "https://rentals-backend-three.onrender.com/api/v1/getLandlordDetailsInTenantDashboard",
         {
           propertyId: propertyID,
         }
@@ -836,7 +836,7 @@ const handleOptionChange = (option) => {
       // API call to submit form data
       const response = await axios.post(
         // "http://localhost:8080/api/v1/addingLeaseFormData", 
-        "https://rma1-backend-1.onrender.com/api/v1/addingLeaseFormData", 
+        "https://rentals-backend-three.onrender.com/api/v1/addingLeaseFormData", 
         dataToSubmit // Sending the formData along with propertyId
       );
   
